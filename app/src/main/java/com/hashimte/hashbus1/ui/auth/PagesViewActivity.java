@@ -13,7 +13,16 @@ public class PagesViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pages_view);
-        FragmentContainerView fragmentContainerView = findViewById(R.id.fragmentContainerView);
+        boolean up = getIntent().getBooleanExtra("up", false);
+        if (up) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerView, new SignUpFragment())
+                    .commit();
+        } else{
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerView, new LoginFragment())
+                    .commit();
+        }
     }
 
 }

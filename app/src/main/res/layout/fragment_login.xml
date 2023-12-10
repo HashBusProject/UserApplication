@@ -65,7 +65,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rectangel"
                 app:startIconDrawable="@drawable/baseline_person_24">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rectangel"
-                app:endIconDrawable="@drawable/baseline_visibility_off_24"
+                app:passwordToggleDrawable="@drawable/visibility_selector"
                 app:passwordToggleEnabled="true"
                 app:startIconDrawable="@drawable/baseline_lock_24">
 
@@ -102,8 +101,7 @@
                     android:lines="1"
                     android:paddingHorizontal="10dp"
                     android:textSize="14sp"
-                    app:boxStrokeColor="@color/hash_dark"
-                    />
+                    app:boxStrokeColor="@color/hash_dark" />
             </com.google.android.material.textfield.TextInputLayout>
 
 

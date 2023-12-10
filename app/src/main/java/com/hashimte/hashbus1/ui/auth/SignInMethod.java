@@ -11,7 +11,6 @@ import com.hashimte.hashbus1.R;
 public class SignInMethod extends AppCompatActivity {
     private Button login, signUp;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,12 +20,11 @@ public class SignInMethod extends AppCompatActivity {
         login.setOnClickListener(view -> {
             Intent intentLogin = new Intent(SignInMethod.this, PagesViewActivity.class);
             startActivity(intentLogin);
-            finish();
         });
         signUp.setOnClickListener(view -> {
-            Intent intentSignUp = new Intent(SignInMethod.this, SignUpActivity.class);
+            Intent intentSignUp = new Intent(SignInMethod.this, PagesViewActivity.class);
+            intentSignUp.putExtra("up", true);
             startActivity(intentSignUp);
-            finish();
         });
     }
 }
