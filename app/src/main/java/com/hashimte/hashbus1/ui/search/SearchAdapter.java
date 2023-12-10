@@ -41,8 +41,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
        final SearchData searchData1=searchData[position];
         holder.startLocation.setText(searchData1.getStartLocation());
         holder.endLocation.setText(searchData1.getEndLocation());
-        holder.waitTime.setText(searchData1.getWaitTime());
-        holder.waitTime.setText(searchData1.getWaitMinTime());
+        holder.waitTime.setText(Integer.toString(searchData1.getWaitTime()));
+        holder.waitMinTime.setText(searchData1.getWaitMinTime());
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

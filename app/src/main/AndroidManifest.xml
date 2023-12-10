@@ -18,6 +18,12 @@
         android:theme="@style/Theme.HashBus1.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".ui.map.EndSearchBarActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.map.StartSearchBarActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.search.RecyclerSearchActivity"
             android:exported="true" />
         <!--
@@ -51,7 +57,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.HashBus1.NoActionBar"></activity>
+            android:theme="@style/Theme.HashBus1.NoActionBar" />
     </application>
 
 </manifest>

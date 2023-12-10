@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.map.StartSearchBarActivity">
+
+    <androidx.appcompat.widget.Toolbar
+
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80sp"
+        android:background="@color/hash_dark"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:paddingBottom="10sp"
+        android:paddingTop="10sp"
+
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+<ImageButton
+    android:id="@+id/startButtPoint"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/hash_dark"
+    android:src="@drawable/baseline_arrow_back_24"
+    android:layout_gravity="start"
+    android:layout_marginStart="-90sp"
+    android:paddingEnd="9sp"
+    android:paddingStart="-3sp"
+    />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/search_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="9dp"
+            app:cardCornerRadius="30dp"
+            android:layout_marginStart="3sp"
+
+
+          >
+
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="wrap_content"
+                android:layout_height="48sp"
+                android:layout_gravity="start"
+
+                android:layout_marginStart="7sp"
+                android:layout_marginBottom="3sp"
+                android:background="@android:color/transparent"
+                android:hint="Select your start point..."
+                android:paddingBottom="4sp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hash_dark"
+                android:drawableStart="@drawable/baseline_search_24"
+                android:drawablePadding="3sp"/>
+
+        </androidx.cardview.widget.CardView>
+<com.google.android.material.textview.MaterialTextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    android:text="Cancel"
+    android:textColor="@color/white"
+    android:layout_marginEnd="5sp"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    android:layout_marginStart="-3sp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fromrecyclerView"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:paddingStart="8dp"/>
+
+
+
+
+
+</LinearLayout>
