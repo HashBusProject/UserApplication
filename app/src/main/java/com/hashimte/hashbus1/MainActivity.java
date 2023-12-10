@@ -1,5 +1,6 @@
 package com.hashimte.hashbus1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.hashimte.hashbus1.databinding.ActivityMainBinding;
+import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent intent=new Intent(MainActivity.this, RecyclerSearchActivity.class);
+                startActivity(intent);
             }
         });
 
