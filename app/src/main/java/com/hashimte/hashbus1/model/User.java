@@ -1,14 +1,18 @@
 package com.hashimte.hashbus1.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
 
+/*
+org.jetbrains.kotlin.plugin.serialization'
+ */
 @Data
 public class User {
-    @SerializedName("id")
-    private long id;
-    @SerializedName("name")
+    @SerializedName("userID")
+    private Integer userID;
+    @SerializedName("username")
     private String username;
     @SerializedName("email")
     private String email;
@@ -17,5 +21,5 @@ public class User {
     @SerializedName("password")
     private String password;
     @SerializedName("role")
-    private int role;
+    private Integer role;
 }
