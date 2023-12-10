@@ -12,8 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.databinding.FragmentHomeBinding;
+import com.hashimte.hashbus1.ui.map.MapsFragment;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends MapsFragment {
 
     private FragmentHomeBinding binding;
 
@@ -24,11 +25,13 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+//fragment_settings
+
+
+//root
+        return view;
     }
 
     @Override
