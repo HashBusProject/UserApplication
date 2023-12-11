@@ -1,7 +1,6 @@
 package com.hashimte.hashbus1.ui.search;
 
 
-
 import android.content.Context;
 
 import android.view.LayoutInflater;
@@ -17,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textview.MaterialTextView;
 import com.hashimte.hashbus1.R;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder>{
-  private SearchData[] searchData;
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+    private SearchData[] searchData;
     private Context context;
 
 
@@ -30,15 +29,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
-        View view=layoutInflater.inflate(R.layout.search_card,parent,false);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.search_card, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder holder, int position) {
-       final SearchData searchData1=searchData[position];
+        final SearchData searchData1 = searchData[position];
         holder.startLocation.setText(searchData1.getStartLocation());
         holder.endLocation.setText(searchData1.getEndLocation());
         holder.waitTime.setText(Integer.toString(searchData1.getWaitTime()));
@@ -48,33 +47,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 Toast.makeText(context, searchData1.getStartLocation(), Toast.LENGTH_SHORT).show();
-
             }
         });
     }
 
     @Override
     public int getItemCount() {
-
         return searchData.length;
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
 
-        MaterialTextView startLocation,endLocation,waitMinTime,waitTime;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        MaterialTextView startLocation, endLocation, waitMinTime, waitTime;
         public ViewHolder(@NonNull View itemView) {
-
-
             super(itemView);
-           startLocation=itemView.findViewById(R.id.startLocation);
-           endLocation=itemView.findViewById(R.id.endLocation);
-           waitTime=itemView.findViewById(R.id.waitTime);
-           waitMinTime=itemView.findViewById(R.id.waitMinTime);
-
-
+            startLocation = itemView.findViewById(R.id.startLocation);
+            endLocation = itemView.findViewById(R.id.endLocation);
+            waitTime = itemView.findViewById(R.id.waitTime);
+            waitMinTime = itemView.findViewById(R.id.waitMinTime);
         }
     }
 }
