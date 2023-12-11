@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -15,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.hashimte.hashbus1.databinding.ActivityMainBinding;
 import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent=new Intent(MainActivity.this, RecyclerSearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, RecyclerSearchActivity.class);
                 startActivity(intent);
             }
         });
@@ -67,5 +69,12 @@ public class MainActivity extends AppCompatActivity {
 
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        getSharedPreferences("app_prefs", MODE_PRIVATE).edit().remove("StartPoint").apply();
+        getSharedPreferences("app_prefs", MODE_PRIVATE).edit().remove("EndPoint").apply();
     }
 }

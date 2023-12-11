@@ -18,14 +18,9 @@
         android:theme="@style/Theme.HashBus1.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.map.EndSearchBarActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.map.StartSearchBarActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.search.RecyclerSearchActivity"
-            android:exported="true" />
+            android:name=".ui.road.ShortestPath"
+            android:exported="true">
+        </activity>
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -40,7 +35,15 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD_LyE-6DuQ8XZ-UmNSAN7cHRBV7gvuCAY" />
-
+        <activity
+            android:name=".ui.map.StartSearchBarActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.search.RecyclerSearchActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.auth.PagesViewActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.auth.SignInMethod"
             android:exported="false" />

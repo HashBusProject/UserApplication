@@ -13,7 +13,7 @@ import retrofit2.http.PUT;
 public class AuthServicesImp implements AuthServices{
 
     private final static String HTTPS = "http://192.168.1.28:8080";
-    private final static String HTTPS1 = "https://model-arcadia-405711.uc.r.appspot.com";
+    private final static String HTTPS1 = "https://global-memento-407716.uc.r.appspot.com/";
 
     private final static AuthServicesImp instance = new AuthServicesImp();
 

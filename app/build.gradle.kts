@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -58,6 +59,6 @@ dependencies {
     implementation ("com.google.android.material:material:1.12.0-alpha02")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("com.google.android.material:material:1.10.0")
-
+    implementation ("com.github.jd-alexander:library:1.1.0")
 
 }

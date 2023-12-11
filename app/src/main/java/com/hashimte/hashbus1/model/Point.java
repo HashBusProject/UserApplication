@@ -1,6 +1,10 @@
 package com.hashimte.hashbus1.model;
 
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.HashSet;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +14,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 //It's Working Don't Touch
 public class Point {
-    private long id;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("pointName")
     private String pointName;
-    private double x;
-    private double y;
+    @SerializedName("x")
+    private Double x;
+    @SerializedName("y")
+    private Double y;
+    //    private HashSet<Journey> journeys;
+    @SerializedName("journeysID")
+    private HashSet<Integer> journeysID;
     public Point(Point point) {
         this.pointName = point.getPointName();
+    }
+
+    public String getPointName() {
+        return pointName;
     }
 }
