@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.road.ShortestPath">
+    tools:context=".ui.ticket.ShortestPath">
+
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -12,4 +14,156 @@
         android:id="@+id/map"
         tools:context=".Shortest"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/hash_dark"
+        android:orientation="vertical"
+        android:id="@+id/linearlayoutRote"
+        >
+        <LinearLayout
+            android:layout_marginTop="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Journy name :"
+                android:layout_gravity="center"
+                android:layout_marginEnd="2sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginStart="10sp"
+
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/previousjourneyName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Journey name"
+                android:textSize="18sp"
+                android:layout_marginTop="2sp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="6sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Journy id :"
+                android:layout_gravity="center"
+                android:layout_marginEnd="2sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginStart="10sp"
+
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/previousticketId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ticket id"
+                android:inputType="number"
+
+                android:layout_marginTop="2sp"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6sp"
+            android:orientation="horizontal">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Point :"
+                android:layout_gravity="center"
+                android:layout_marginEnd="2sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginStart="10sp"
+
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/previousStartPoint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Point"
+                android:textSize="18sp"
+                android:layout_marginTop="2sp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="6sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End point :"
+                android:layout_gravity="center"
+                android:layout_marginEnd="2sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginStart="10sp"
+
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/previousEndPonit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="End Point"
+                android:inputType="number"
+
+                android:layout_marginTop="2sp"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buyTicket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="10sp"
+        android:text="Buy"
+        android:padding="10sp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+
+        android:textSize="18sp"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

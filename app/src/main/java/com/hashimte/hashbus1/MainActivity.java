@@ -19,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hashimte.hashbus1.databinding.ActivityMainBinding;
 import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
+import com.hashimte.hashbus1.ui.ticket.ShortestPath;
+import com.hashimte.hashbus1.ui.ticket.ShowYourTicketFragment;
+import com.hashimte.hashbus1.ui.ticket.TicketFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent = new Intent(MainActivity.this, RecyclerSearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, ShortestPath.class);
                 startActivity(intent);
             }
         });

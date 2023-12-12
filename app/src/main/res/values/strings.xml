@@ -144,6 +144,7 @@
     <string name="prompt_firstname">First Name</string>
     <string name="prompt_lastname">Last Name</string>
     <string name="sign_up">Sign Up</string>
+    <string name="show_yours_ticket">Show yours ticket</string>
     <string name="set_time">Set Time</string>
     <string name="search_for_a_destination_point">Search for a destination point</string>
     <string name="search_for_a_source_point">Search for a source point</string>
