@@ -2,10 +2,12 @@ package com.hashimte.hashbus1.ui.map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,24 +35,37 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.hashimte.hashbus1.MainActivity;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.model.Point;
+import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
+
+import org.w3c.dom.Text;
+
+import java.sql.Time;
+import java.text.DecimalFormat;
+import java.util.Calendar;
 
 public class MapsFragment extends Fragment {
     private final int FINE_PERMISSION_CODE = 1;
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap myMap;
-    private Button timer;
+    private CardView timer;
+    private TextView txtTime;
+    private Button search;
     private TextView startPointTxt;
     private TextView endPointTxt;
-
     private MarkerOptions startMarker = null;
     private MarkerOptions endMarker = null;
     private Point startPoint = null;
     private Point endPoint = null;
     private Bundle data;
+    private Location myLocation;
+    private Calendar myCalender;
+    private Time time;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -110,8 +125,16 @@ public class MapsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(callback);
+        }
         startPointTxt = view.findViewById(R.id.startPoint);
         endPointTxt = view.findViewById(R.id.endPoint);
+        timer = view.findViewById(R.id.time_card);
+        txtTime = view.findViewById(R.id.time_txt);
+        search = view.findViewById(R.id.searchJourney);
         data = new Bundle();
         startPointTxt.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), StartSearchBarActivity.class);
@@ -125,11 +148,41 @@ public class MapsFragment extends Fragment {
             intent.putExtras(data);
             startActivity(intent);
         });
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
-        }
+        timer.setOnClickListener(v -> {
+            myCalender = Calendar.getInstance();
+            int mHour = myCalender.get(Calendar.HOUR);
+            int mMinute = myCalender.get(Calendar.MINUTE);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    getContext(),
+                    R.style.CustomDatePicker,
+                    (timePicker, hourOfDay, minutes) -> {
+                        DecimalFormat decimalFormat = new DecimalFormat("00");
+                        time = Time.valueOf(decimalFormat.format(hourOfDay) + ":" + decimalFormat.format(minutes) + ":00");
+                        txtTime.setText(decimalFormat.format(hourOfDay) + ":" + decimalFormat.format(minutes));
+                    },
+                    0, 0, false
+            );
+            timePickerDialog.show();
+        });
+        search.setOnClickListener(v -> {
+            if (startPoint == null) {
+                Snackbar.make(view, "Please Pick The Start Point", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else if (endPoint == null) {
+                Snackbar.make(view, "Please Pick The End Point", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else if (time == null) {
+                Snackbar.make(view, "Please Pick Time", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else {
+                Intent intent = new Intent(getContext(), RecyclerSearchActivity.class);
+                data.putString("StartPoint", new Gson().toJson(startPoint));
+                data.putString("EndPoint", new Gson().toJson(endPoint));
+                data.putString("Time", time.toString());
+                intent.putExtras(data);
+                startActivity(intent);
+            }
+        });
     }
 
 //    @Override
@@ -197,10 +250,19 @@ public class MapsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-        startPoint = new Gson().fromJson(sharedPreferences.getString("StartPoint", ""), Point.class);
-        endPoint = new Gson().fromJson(sharedPreferences.getString("EndPoint", ""), Point.class);
-//        sharedPreferences.edit().remove("StartPoint").remove("EndPoint").apply();
-
+        if (sharedPreferences.getBoolean("error", false)) {
+            Snackbar.make(getView(), "There is No journeys in this way or the time!!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            sharedPreferences.edit().remove("error").apply();
+        }
+        Point temp = new Gson().fromJson(sharedPreferences.getString("StartPoint", ""), Point.class);
+        if (temp != null)
+            startPoint = temp;
+        temp = new Gson().fromJson(sharedPreferences.getString("EndPoint", ""), Point.class);
+        if (temp != null)
+            endPoint = temp;
+        if (myMap == null)
+            return;
         // Clear existing markers before adding new ones
         if (myMap != null)
             myMap.clear();
@@ -217,11 +279,11 @@ public class MapsFragment extends Fragment {
             myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
 
-            if (startPoint.getId() != 1) {
-                endPoint = new Gson().fromJson(sharedPreferences.getString("HashPoint", null), Point.class);
-                endPointTxt.setEnabled(false);
-            } else
-                endPointTxt.setEnabled(true);
+//            if (startPoint.getId() != 1) {
+//                endPoint = new Gson().fromJson(sharedPreferences.getString("HashPoint", null), Point.class);
+//                endPointTxt.setEnabled(false);
+//            } else
+//                endPointTxt.setEnabled(true);
         }
 
         if (endPoint != null) {
@@ -237,11 +299,11 @@ public class MapsFragment extends Fragment {
             myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
 
-            if (endPoint.getId() != 1) {
-                startPoint = new Gson().fromJson(sharedPreferences.getString("HashPoint", null), Point.class);
-                startPointTxt.setEnabled(false);
-            } else
-                startPointTxt.setEnabled(true);
+//            if (endPoint.getId() != 1) {
+//                startPoint = new Gson().fromJson(sharedPreferences.getString("HashPoint", null), Point.class);
+//                startPointTxt.setEnabled(false);
+//            } else
+//                startPointTxt.setEnabled(true);
         }
 
         // Draw line if both points are available

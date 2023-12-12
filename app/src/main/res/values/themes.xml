@@ -14,6 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+    <style name="CustomDatePicker" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#A70303</item>
+        <item name="android:textColorSecondary">#A70303</item>
+        <item name="colorOnPrimary">#A70303</item>>
+    </style>
+
     <style name="Theme.HashBus1.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

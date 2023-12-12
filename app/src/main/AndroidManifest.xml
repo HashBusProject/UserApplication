@@ -34,7 +34,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD_LyE-6DuQ8XZ-UmNSAN7cHRBV7gvuCAY" />
+            android:value="AIzaSyDyZbg_i9y9T5_tdCRX3evZdD89rKPMWqk" />
         <activity
             android:name=".ui.map.StartSearchBarActivity"
             android:exported="true" />

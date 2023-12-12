@@ -6,7 +6,7 @@ public class SearchData {
     private String waitMinTime;
     private Integer waitTime;
 
-    public SearchData(String startLocation, String endLocation,  Integer waitTime,String waitMinTime) {
+    public SearchData(String startLocation, String endLocation, Integer waitTime, String waitMinTime) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.waitMinTime = waitMinTime;
