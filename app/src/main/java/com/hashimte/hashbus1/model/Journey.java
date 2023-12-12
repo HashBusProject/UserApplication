@@ -1,5 +1,7 @@
 package com.hashimte.hashbus1.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashSet;
 
 import lombok.AllArgsConstructor;
@@ -10,10 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Journey {
-    private long id;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("name")
     private String name;
-    private Point sourcePoint;
-    private Point destinationPoint;
-    private HashSet<Point> stopPoints;
+    @SerializedName("sourcePoint")
+    private Integer sourcePoint;
+    @SerializedName("destinationPoint")
+    private Integer destinationPoint;
+    @SerializedName("stopPoints")
+    private HashSet<Integer> stopPoints;
+    @SerializedName("journeys")
     private HashSet<Schedule> journeys;
 }
