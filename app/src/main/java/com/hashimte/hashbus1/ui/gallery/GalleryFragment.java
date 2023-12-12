@@ -24,9 +24,8 @@ public class GalleryFragment extends Fragment {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        View view = inflater.inflate(R.layout.fragment_road_map, container, false);
 
-        return view;
+        return root;
     }
 
     @Override

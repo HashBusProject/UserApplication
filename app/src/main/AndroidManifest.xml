@@ -18,7 +18,7 @@
         android:theme="@style/Theme.HashBus1.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.road.ShortestPath"
+            android:name=".ui.ticket.ShortestPath"
             android:exported="true">
         </activity>
         <!--
