@@ -32,6 +32,9 @@ android {
     }
 }
 
+//repositories {
+//    mavenCentral()
+//}
 
 
 dependencies {
@@ -45,7 +48,9 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.5")
     implementation("androidx.annotation:annotation:1.7.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
+//    implementation("com.google.android.gms:play-services:12.0.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-analytics:18.0.4")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -60,5 +65,7 @@ dependencies {
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("com.google.android.material:material:1.10.0")
     implementation ("com.github.jd-alexander:library:1.1.0")
-
+    implementation("com.google.maps.android:android-maps-utils:3.8.0")
+    compileOnly("com.google.maps:google-maps-services:0.1.20")
+    implementation("com.google.maps:google-maps-services:0.1.20")
 }

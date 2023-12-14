@@ -1,5 +1,7 @@
 package com.hashimte.hashbus1.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashSet;
 
 import lombok.AllArgsConstructor;
@@ -10,9 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Bus {
+    @SerializedName("driver")
     private User driver;
-    private long id;
-    private int cap;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("cap")
+    private Integer cap;
+    @SerializedName("schedules")
     private HashSet<Schedule> schedules;
-    private boolean isWorking;
+    @SerializedName("isWorking")
+    private Boolean isWorking;
+    @SerializedName("x")
+    private Double x;
+    @SerializedName("y")
+    private Double y;
 }
