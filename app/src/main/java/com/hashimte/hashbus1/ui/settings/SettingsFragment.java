@@ -17,9 +17,7 @@ import android.widget.TextView;
 
 import com.hashimte.hashbus1.LauncherActivity;
 import com.hashimte.hashbus1.R;
-import com.hashimte.hashbus1.databinding.FragmentHomeBinding;
 import com.hashimte.hashbus1.databinding.FragmentSettingsBinding;
-import com.hashimte.hashbus1.ui.home.HomeViewModel;
 
 public class SettingsFragment extends Fragment {
 

@@ -1,8 +1,11 @@
 package com.hashimte.hashbus1.api;
 
 import com.google.gson.Gson;
+import com.hashimte.hashbus1.model.Bus;
+import com.hashimte.hashbus1.model.Journey;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
+import com.hashimte.hashbus1.model.Ticket;
 import com.hashimte.hashbus1.model.User;
 
 import java.util.List;
@@ -52,5 +55,42 @@ public class UserServicesImp implements UserServices {
             @Query("endPointId") Integer endPoint,
             @Query("time") String time) {
         return retrofit.create(UserServices.class).getSearchDataSchedule(startPoint, endPoint, time);
+    }
+
+    @Override
+    @GET("/User/GetPointById")
+    public Call<Point> getPointByID(@Query("pointId") Integer pointId) {
+        return retrofit.create(UserServices.class).getPointByID(pointId);
+    }
+
+    @GET("/User/GetBusById")
+    public Call<Bus> getBusById(@Query("busId") Integer busId) {
+        return retrofit.create(UserServices.class).getBusById(busId);
+    }
+
+    @GET("/User/GetTicketsByUserId")
+    public Call<Ticket> getTicketsByUserId(@Query("userId") Integer userId) {
+        return retrofit.create(UserServices.class).getTicketsByUserId(userId);
+    }
+
+    @GET("/User/GetAllJournys")
+    public Call<List<Journey>> getAllJourneys() {
+        return retrofit.create(UserServices.class).getAllJourneys();
+    }
+
+    @GET("/User/GetJourneyById")
+    public Call<Journey> getJourneyById(@Query("journeyId") Integer journeyId) {
+        return retrofit.create(UserServices.class).getJourneyById(journeyId);
+    }
+
+    @GET("/User/BuyTicket")
+    public Call<Boolean> buyATicket() {
+        return retrofit.create(UserServices.class).buyATicket();
+    }
+
+    @Override
+    @GET("/User/AllPointByJourneyId")
+    public Call<List<Point>> getAllPointByJourneyId(@Query("journeyId") Integer journeyId) {
+        return retrofit.create(UserServices.class).getAllPointByJourneyId(journeyId);
     }
 }

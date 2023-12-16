@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.Toast;
 
@@ -23,13 +24,13 @@ import com.hashimte.hashbus1.model.SearchDataSchedule;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecyclerSearchActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private SearchData[] searchData;
     private List<SearchDataSchedule> schedules;
 
     @Override
@@ -37,6 +38,8 @@ public class RecyclerSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_search);
         recyclerView = findViewById(R.id.searchRecyclerView);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Journeys..");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Journey name, sourcePoint,
@@ -52,13 +55,11 @@ public class RecyclerSearchActivity extends AppCompatActivity {
                     if(schedules.isEmpty()){
 //                        Snackbar.make(RecyclerSearchActivity.this.getCurrentFocus(), "Replace with your own action", Snackbar.LENGTH_LONG)
 //                                .setAction("Action", null).show();
-                        Toast.makeText(RecyclerSearchActivity.this, "There Is No Journey For this Points after this time.", Toast.LENGTH_SHORT).show();
-                        getIntent().getExtras().putBoolean("Error", true);
                         getSharedPreferences("app_prefs", MODE_PRIVATE).edit().putBoolean("error", true).apply();
                         finish();
                         return;
                     }
-                    SearchAdapter searchAdapter = new SearchAdapter(schedules, RecyclerSearchActivity.this, startPoint);
+                    SearchAdapter searchAdapter = new SearchAdapter(schedules, RecyclerSearchActivity.this, startPoint, endPoint);
                     recyclerView.setAdapter(searchAdapter);
                 }
                 else {
@@ -69,9 +70,18 @@ public class RecyclerSearchActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<SearchDataSchedule>> call, Throwable t) {
                 Log.e("Error onFailure", t.getMessage());
-
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

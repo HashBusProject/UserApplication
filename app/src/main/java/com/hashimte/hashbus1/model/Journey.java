@@ -24,4 +24,7 @@ public class Journey {
     private HashSet<Integer> stopPoints;
     @SerializedName("journeys")
     private HashSet<Schedule> journeys;
+    @SerializedName("price")
+    private Double price;
+
 }

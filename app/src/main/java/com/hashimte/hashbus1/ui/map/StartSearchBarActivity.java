@@ -34,7 +34,6 @@ public class StartSearchBarActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Point> points;
     private EditText editText;
-
     private StartPointAdapter adapter;
 
     @Override
@@ -55,11 +54,11 @@ public class StartSearchBarActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (points != null && !points.isEmpty() && points.get(0) != null) {
-                    arrayList.add(points.get(0));
-                    adapter.setData(arrayList);
-                    adapter.notifyDataSetChanged();
-                }
+//                if (points != null && !points.isEmpty() && points.get(0) != null) {
+//                    arrayList.add(points.get(0));
+//                    adapter.setData(arrayList);
+//                    adapter.notifyDataSetChanged();
+//                }
             }
 
             @Override
@@ -93,7 +92,6 @@ public class StartSearchBarActivity extends AppCompatActivity {
                     getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                             .edit().putString("HashPoint", new Gson().toJson(points.get(0)))
                             .apply();
-
                 } else
                     Log.e("Error response", "Error is " + response.message());
             }

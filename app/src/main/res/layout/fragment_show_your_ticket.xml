@@ -7,6 +7,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ticket.ShowYourTicketFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/ticket_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_from_your_tickets"
+        android:queryHint="@string/search_from_your_tickets" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/showTicketRecyclerView"

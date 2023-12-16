@@ -8,7 +8,7 @@
 
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/map_reserve"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -21,12 +21,14 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:outlineAmbientShadowColor="@color/hash_light">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:outlineAmbientShadowColor="@color/hash_light">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -83,7 +85,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="40sp"
-                android:layout_marginStart="30sp"
+                android:layout_marginStart="34sp"
                 android:layout_marginTop="20sp"
                 android:layout_marginEnd="30sp"
                 android:clickable="true"
@@ -154,6 +156,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10sp"
+        android:layout_marginBottom="24dp"
         android:padding="10sp"
         android:text="Search"
         android:textAllCaps="false"
@@ -161,8 +164,9 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.842"
         app:layout_constraintStart_toStartOf="parent" />
 
 
