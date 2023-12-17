@@ -4,166 +4,195 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.ticket.ShortestPath">
 
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/map"
-        tools:context=".Shortest"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="150sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/hash_dark"
-        android:orientation="vertical"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <ImageButton
+            android:id="@+id/startButtPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="-90sp"
+            android:background="@color/hash_dark"
+            android:paddingStart="-3sp"
+            android:paddingEnd="9sp"
+            android:src="@drawable/baseline_arrow_back_24" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <fragment
+        android:id="@+id/map_reserve"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/linearlayoutRote"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:context=".ui.ticket.ShortestPath" />
+
+    <LinearLayout
         android:id="@+id/linearlayoutRote"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/myrect"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/buyTicket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <LinearLayout
-            android:layout_marginTop="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Journy name :"
                 android:layout_gravity="center"
-                android:layout_marginEnd="2sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_marginStart="10sp"
+                android:layout_marginEnd="2sp"
+                android:paddingRight="20dp"
+                android:text="@string/journey_name"
+                android:textColor="@color/black"
+                android:textSize="20sp"
 
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/previousjourneyName"
+                android:id="@+id/txt_journey_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Journey name"
-                android:textSize="18sp"
-                android:layout_marginTop="2sp"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
-                />
+                android:layout_marginTop="2sp"
+                android:text="Journey Name Value"
+                android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="6sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6sp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Journy id :"
                 android:layout_gravity="center"
-                android:layout_marginEnd="2sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_marginStart="10sp"
+                android:layout_marginEnd="2sp"
+                android:paddingRight="45dp"
+                android:text="@string/ticket_price"
+                android:textColor="@color/black"
+                android:textSize="20sp"
 
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/previousticketId"
+                android:id="@+id/txt_ticket_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ticket id"
-                android:inputType="number"
-
                 android:layout_marginTop="2sp"
-                android:textSize="18sp"
                 android:gravity="center"
-                android:textColor="@color/white"
-                />
+
+                android:inputType="number"
+                android:text="Ticket price"
+                android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6sp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10sp"
+                android:layout_marginEnd="2sp"
+                android:paddingRight="50dp"
                 android:text="Start Point :"
-                android:layout_gravity="center"
-                android:layout_marginEnd="2sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:textColor="@color/black"
                 android:textSize="20sp"
-                android:layout_marginStart="10sp"
 
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/previousStartPoint"
+                android:id="@+id/txt_start_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start Point"
-                android:textSize="18sp"
-                android:layout_marginTop="2sp"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
-                />
+                android:layout_marginTop="2sp"
+                android:text="Start Point"
+                android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="6sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6sp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="End point :"
                 android:layout_gravity="center"
-                android:layout_marginEnd="2sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_marginStart="10sp"
+                android:layout_marginEnd="2sp"
+                android:paddingRight="60dp"
+                android:text="End point :"
+
+                android:textColor="@color/black"
+                android:textSize="20sp"
 
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/previousEndPonit"
+                android:id="@+id/txt_end_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="End Point"
-                android:inputType="number"
-
                 android:layout_marginTop="2sp"
-                android:textSize="18sp"
                 android:gravity="center"
-                android:textColor="@color/white"
-                />
+
+                android:inputType="number"
+                android:text="End Point"
+                android:textSize="18sp" />
         </LinearLayout>
-
-
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buyTicket"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="10sp"
-        android:text="Buy"
+        android:layout_marginBottom="4sp"
         android:padding="10sp"
+        android:text="Buy"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textStyle="bold"
-
         android:textSize="18sp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

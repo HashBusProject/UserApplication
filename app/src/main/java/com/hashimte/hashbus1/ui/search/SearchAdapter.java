@@ -3,7 +3,9 @@ package com.hashimte.hashbus1.ui.search;
 
 import android.content.Context;
 
-import android.location.Location;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,48 +15,43 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
+import com.google.gson.Gson;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.Duration;
 import com.google.maps.model.LatLng;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.maps.DirectionsApi;
-import com.google.maps.DirectionsApiRequest;
-import com.google.maps.DistanceMatrixApi;
-import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
-import com.google.maps.PendingResult;
-import com.google.maps.android.SphericalUtil;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.Distance;
 import com.google.maps.model.TravelMode;
 import com.hashimte.hashbus1.R;
+import com.hashimte.hashbus1.api.UserServicesImp;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
+import com.hashimte.hashbus1.ui.reserve.JourneyReserveView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
-//    private SearchData[] searchData;
     private List<SearchDataSchedule> searchData;
     private Context context;
-
     private Point startPoint;
+    private Point endPoint;
 
 
-    public SearchAdapter(List<SearchDataSchedule> searchData, Context context, Point startPoint) {
+    public SearchAdapter(List<SearchDataSchedule> searchData, Context context, Point startPoint, Point endPoint) {
         this.searchData = searchData;
         this.context = context;
         this.startPoint = startPoint;
+        this.endPoint = endPoint;
     }
 
     @NonNull
@@ -79,6 +76,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             try {
                 DirectionsResult directionsResult = DirectionsApi.newRequest(getGeoContext())
                         .mode(TravelMode.DRIVING)
+                        //TODO,
                         .origin(new LatLng(32.103113, 36.180002))
                         .destination(new LatLng(32.058997, 36.066677))
                         .await();
@@ -104,12 +102,38 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.startLocation.setText(searchData1.getJourney().getName());
         holder.endLocation.setText(searchData1.getSchedule().getTime().toString());
         holder.waitMinTime.setText("min");
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(context, searchData1.getStartLocation(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, JourneyReserveView.class);
+            Bundle data = new Bundle();
+            UserServicesImp.getInstance().getPointByID(searchData1.getJourney().getSourcePoint()).enqueue(
+                    new Callback<Point>() {
+                        @Override
+                        public void onResponse(Call<Point> call, Response<Point> response) {
+                            if (response.isSuccessful()) {
+                                if (searchData1.getJourney().getSourcePoint() == startPoint.getId()) {
+                                    data.putBoolean("isSame", true);
+                                } else {
+                                    data.putString("pickPoint", new Gson().toJson(response.body()));
+                                    data.putBoolean("isSame", false);
+                                }
+                                data.putString("searchData", new Gson().toJson(searchData1));
+                                data.putString("startPointData", new Gson().toJson(startPoint));
+                                data.putString("endPointData", new Gson().toJson(startPoint));
+                                intent.putExtras(data);
+                                context.startActivity(intent);
+                            } else {
+                                Log.e("onSe :", response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Point> call, Throwable t) {
+                            Log.e("onFailuer :", t.getMessage());
+                        }
+                    }
+            );
+
+        });
     }
 
     private GeoApiContext getGeoContext() {

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
@@ -37,12 +38,9 @@ import com.google.android.gms.tasks.Task;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.hashimte.hashbus1.MainActivity;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
-
-import org.w3c.dom.Text;
 
 import java.sql.Time;
 import java.text.DecimalFormat;
@@ -70,13 +68,17 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             myMap = googleMap;
-
             //currentLocation.getLatitude(), currentLocation.getLongitude()
             LatLng currentLatLng = new LatLng(31.8783807, 36.0174577);
             myMap.addMarker(new MarkerOptions().position(currentLatLng).title("My Location"));
             myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager
+                    .PERMISSION_GRANTED) {
+                myMap.setMyLocationEnabled(true);
+            }
         }
+
     };
 
     @Nullable
@@ -102,7 +104,7 @@ public class MapsFragment extends Fragment {
         task.addOnSuccessListener(location -> {
             if (location != null) {
                 currentLocation = location;
-                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_reserve);
                 if (mapFragment != null) {
                     mapFragment.getMapAsync(callback);
                 }
@@ -126,7 +128,7 @@ public class MapsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_reserve);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
@@ -185,65 +187,18 @@ public class MapsFragment extends Fragment {
         });
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        SharedPreferences sharedPreferences = getContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-//        startPoint = new Gson().fromJson(sharedPreferences.getString("StartPoint", ""), Point.class);
-//        endPoint = new Gson().fromJson(sharedPreferences.getString("EndPoint", ""), Point.class);
-//        sharedPreferences.edit().remove("StartPoint").remove("EndPoint").apply();
-//        if (startPoint != null) {
-//            startPointTxt.setText(startPoint.getPointName());
-//            LatLng currentLatLng = new LatLng(startPoint.getX(), startPoint.getY());
-//            startMarker = new MarkerOptions().position(currentLatLng).title(startPoint.getPointName());
-//            myMap.addMarker(startMarker);
-//            myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-//            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
-//            if (startPoint.getId() != 1) {
-//                endPoint = new Gson().fromJson(
-//                        sharedPreferences.getString("HashPoint", null),
-//                        Point.class
-//                );
-//                endPointTxt.setEnabled(false);
-//            } else
-//                endPointTxt.setEnabled(true);
-//        }
-//        if (endPoint != null) {
-//            endPointTxt.setText(endPoint.getPointName());
-//            LatLng currentLatLng = new LatLng(endPoint.getX(), endPoint.getY());
-//            endMarker = new MarkerOptions().position(currentLatLng).title(endPoint.getPointName());
-//            myMap.addMarker(endMarker);
-//            myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-//            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
-//            if (endPoint.getId() != 1) {
-//                startPoint = new Gson().fromJson(
-//                        sharedPreferences.getString("HashPoint", null),
-//                        Point.class
-//                );
-//                startPointTxt.setEnabled(false);
-//            } else
-//                startPointTxt.setEnabled(true);
-//        }
-//        if (startPoint != null && endPoint != null) {
-//            PolylineOptions lineOptions = new PolylineOptions()
-//                    .add(new LatLng(startPoint.getX(), startPoint.getY()))
-//                    .add(new LatLng(endPoint.getX(), endPoint.getY()))
-//                    .color(Color.RED) // Set desired color
-//                    .width(5); // Set desired width
-//
-//            // Add the polyline to the map
-//            Polyline line = myMap.addPolyline(lineOptions);
-//            LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-//            boundsBuilder.include(new LatLng(startPoint.getX(), startPoint.getY()));
-//            boundsBuilder.include(new LatLng(endPoint.getX(), endPoint.getY()));
-//            LatLngBounds bounds = boundsBuilder.build();
-//
-//            int padding = 100; // Adjust padding as needed
-//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-//            myMap.animateCamera(cu);
-//        }
-//    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        startPoint = null;
+        endPoint = null;
+        getContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                .edit()
+                .remove("StartPoint")
+                .remove("EndPoint")
+                .apply();
+    }
 
     //TODO, Solve NullPointerException Error When we restart The;
     @Override
@@ -261,6 +216,7 @@ public class MapsFragment extends Fragment {
         temp = new Gson().fromJson(sharedPreferences.getString("EndPoint", ""), Point.class);
         if (temp != null)
             endPoint = temp;
+
         if (myMap == null)
             return;
         // Clear existing markers before adding new ones

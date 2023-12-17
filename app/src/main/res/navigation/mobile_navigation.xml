@@ -3,29 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
-
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.hashimte.hashbus1.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.hashimte.hashbus1.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.hashimte.hashbus1.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+    app:startDestination="@id/mapsFragment">
 
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.hashimte.hashbus1.ui.settings.SettingsFragment"
         android:label="@string/action_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.hashimte.hashbus1.ui.map.MapsFragment"
+        android:label="@string/journey_planner"
+        tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/ticketFragment"
+        android:name="com.hashimte.hashbus1.ui.ticket.TicketFragment"
+        android:label="@string/tickets"
+        tools:layout="@layout/fragment_ticket" />
+    <fragment
+        android:id="@+id/buyTicketFragment"
+        android:name="com.hashimte.hashbus1.ui.ticket.BuyTicketFragment"
+        android:label="@string/buy_tickets"
+        tools:layout="@layout/fragment_buy_ticket" />
+    <fragment
+        android:id="@+id/showYourTicketFragment"
+        android:name="com.hashimte.hashbus1.ui.ticket.ShowYourTicketFragment"
+        android:label="@string/your_tickets"
+        tools:layout="@layout/fragment_show_your_ticket" />
+    <activity
+        android:id="@+id/shortestPath"
+        android:name="com.hashimte.hashbus1.ui.ticket.ShortestPath"
+        android:label="activity_shortest_path"
+        tools:layout="@layout/activity_shortest_path" />
 </navigation>

@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="hash_dark">#A70303</color>
+    <color name="hash_dark_with_tr">#55A70303</color>
     <color name="hash_light">#A51E1E</color>
     <!-- OLD COLORS    -->
 

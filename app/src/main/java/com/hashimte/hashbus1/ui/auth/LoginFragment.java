@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hashimte.hashbus1.MainActivity;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.api.AuthServicesImp;
@@ -83,11 +84,8 @@ public class LoginFragment extends Fragment {
                             getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                                     .edit().putBoolean("isLoggedIn", true).apply();
                             getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                    .edit().putString("username", response.body().getUsername()).apply();
-                            getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                    .edit().putString("email", response.body().getEmail()).apply();
-                            getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                    .edit().putString("name", response.body().getName()).apply();
+                                    .edit().putString("userInfo", new Gson().toJson(response.body(), User.class))
+                                    .apply();
 
                         } else {
                             Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();

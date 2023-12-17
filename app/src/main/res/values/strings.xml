@@ -144,9 +144,19 @@
     <string name="prompt_firstname">First Name</string>
     <string name="prompt_lastname">Last Name</string>
     <string name="sign_up">Sign Up</string>
-    <string name="show_yours_ticket">Show yours ticket</string>
+    <string name="show_your_ticket">Show your tickets</string>
     <string name="set_time">Set Time</string>
     <string name="search_for_a_destination_point">Search for a destination point</string>
     <string name="search_for_a_source_point">Search for a source point</string>
+    <string name="journey_planner">Journey Planner</string>
+    <string name="tickets">Tickets</string>
+    <string name="your_tickets">Your Tickets</string>
+    <string name="buy_tickets">Buy Tickets</string>
+    <string name="search_from_your_tickets">Search from Your Tickets</string>
+    <string name="journey_name">Journey Name:</string>
+    <string name="ticket_price">Ticket Price:</string>
+    <string name="title_activity_result_view">ResultViewActivity</string>
+    <string name="title_activity_journey_reserve_map">JourneyReserveMapActivity</string>
+    <string name="wait">Wait...</string>
 
 </resources>

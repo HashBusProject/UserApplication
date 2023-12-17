@@ -8,36 +8,36 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.Manifest;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.directions.route.AbstractRouting;
 import com.directions.route.Routing;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.CameraUpdate;
 
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.RoutingListener;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
 import com.hashimte.hashbus1.R;
+import com.hashimte.hashbus1.api.UserServicesImp;
+import com.hashimte.hashbus1.map.MyRoutingListener;
+import com.hashimte.hashbus1.model.Journey;
+import com.hashimte.hashbus1.model.Point;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShortestPath extends FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, RoutingListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-
+public class ShortestPath extends FragmentActivity implements OnMapReadyCallback {
     //google map objectc
     private GoogleMap mMap;
 
@@ -50,20 +50,70 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
     //to get location permissions.
     private final static int LOCATION_REQUEST_CODE = 1;
     boolean locationPermission = false;
-
-    //polyline object
     private List<Polyline> polylines = null;
+    private List<Point> points;
+    private MaterialTextView journeyName;
+    private MaterialTextView ticketPrice;
+    private MaterialTextView startPointName;
+    private MaterialTextView endPointName;
+    private Button buy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shortest_path);
         //request location permission.
+//        getActionBar().setCustomView(R.layout.app_bar_main);
         requestPermision();
-        //init google map fragment to show map.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.map_reserve);
         mapFragment.getMapAsync(this);
+        journeyName = findViewById(R.id.txt_journey_name);
+        ticketPrice = findViewById(R.id.txt_ticket_price);
+        startPointName = findViewById(R.id.txt_start_name);
+        endPointName = findViewById(R.id.txt_end_name);
+        buy = findViewById(R.id.buyTicket);
+        if (locationPermission) {
+            Journey journey = new Gson().fromJson(
+                    getIntent().getExtras().getString("data", null),
+                    Journey.class
+            );
+            journeyName.setText(journey.getName());
+            ticketPrice.setText(new DecimalFormat("##.## JD").format(journey.getPrice()));
+            UserServicesImp.getInstance().getAllPointByJourneyId(journey.getId()).enqueue(
+                    new Callback<List<Point>>() {
+                        @Override
+                        public void onResponse(Call<List<Point>> call, Response<List<Point>> response) {
+                            if (response.isSuccessful()) {
+                                points = response.body();
+                                findRoutes(points);
+                                startPointName.setText(points.get(0).getPointName());
+                                endPointName.setText(points.get(points.size() - 1).getPointName());
+                                Log.i("Points", points.toString());
+                            } else {
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Point>> call, Throwable t) {
+                            Log.e("error 167", t.getMessage());
+                        }
+                    }
+            );
+            buy.setOnClickListener(v -> {
+                // TODO, buy a ticket from here
+            });
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager
+                .PERMISSION_GRANTED) {
+//            startLocation
+        }
     }
 
     private void requestPermision() {
@@ -80,7 +130,6 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case LOCATION_REQUEST_CODE: {
@@ -89,7 +138,6 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
                     //if permission granted.
                     locationPermission = true;
                     getMyLocation();
-
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -102,114 +150,44 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
     //to get user location
     private void getMyLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            requestPermision();
             return;
         }
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-
-                myLocation = location;
-                LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        ltlng, 16f);
-                mMap.animateCamera(cameraUpdate);
-            }
-        });
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                end = new LatLng(32.012904, 35.951025);
-                mMap.clear();
-                start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                //start route finding
-                Findroutes(start, end);
-            }
-        });
+        mMap.setOnMyLocationChangeListener(location -> myLocation = location);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (locationPermission) {
-            getMyLocation();
-        }
-
     }
 
     // function to find Routes.
-    public void Findroutes(LatLng Start, LatLng End) {
-        if (Start == null || End == null) {
+    public void findRoutes(List<Point> points) {
+        if (points.get(0) == null || points.get(points.size() - 1) == null) {
             Toast.makeText(ShortestPath.this, "Unable to get location", Toast.LENGTH_LONG).show();
         } else {
+            List<LatLng> latLngs = new ArrayList<>();
+            latLngs.add(new LatLng(points.get(0).getX(), points.get(0).getY()));
+            mMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Start Point"));
+            for (int i = 1; i < points.size(); i++) {
+                LatLng latLng = new LatLng(points.get(i).getX(), points.get(i).getY());
+                latLngs.add(latLng);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng).title(points.get(i).getPointName());
+//                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_stop));
+                mMap.addMarker(markerOptions);
+            }
+            latLngs.add(new LatLng(points.get(points.size() - 1).getX(), points.get(points.size() - 1).getY()));
+            mMap.addMarker(new MarkerOptions().position(latLngs.get(latLngs.size() - 1)).title("End Point"));
             Routing routing = new Routing.Builder()
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
-                    .withListener(this)
+                    .withListener(new MyRoutingListener(mMap, 4, getResources()))
                     .alternativeRoutes(true)
-                    .waypoints(Start, new LatLng(32.090221, 35.984810), End)
+                    .waypoints(latLngs)
                     .key("AIzaSyBH4sMITOfvKIIq5Sa7HuGq7oikYEujTYs")
                     .build();
             routing.execute();
         }
-    }
-
-    //Routing call back functions.
-
-    @Override
-    public void onRoutingFailure(RouteException e) {
-    }
-
-    @Override
-    public void onRoutingStart() {
-        Toast.makeText(ShortestPath.this, "Finding Route...", Toast.LENGTH_LONG).show();
-    }
-
-    //If Route finding success..
-    @Override
-    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-        if (polylines != null) {
-            polylines.clear();
-        }
-        PolylineOptions polyOptions = new PolylineOptions();
-        LatLng polylineStartLatLng = null;
-        LatLng polylineEndLatLng = null;
-        polylines = new ArrayList<>();
-        for (int i = 0; i < route.size(); i++) {
-            if (i == shortestRouteIndex) {
-                polyOptions.color(getResources().getColor(R.color.hash_dark));
-                polyOptions.width(7);
-                polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
-                Polyline polyline = mMap.addPolyline(polyOptions);
-                polylineStartLatLng = polyline.getPoints().get(0);
-                int k = polyline.getPoints().size();
-                polylineEndLatLng = polyline.getPoints().get(k - 1);
-                polylines.add(polyline);
-            }
-        }
-        //Add Marker on route ending position
-        MarkerOptions endMarker = new MarkerOptions();
-        endMarker.position(polylineEndLatLng);
-        float[] result = new float[10];
-        Location.distanceBetween(polylineStartLatLng.latitude, polylineStartLatLng.longitude, polylineEndLatLng.latitude, polylineEndLatLng.longitude, result);
-        endMarker.title("Destination" + result[0]);
-        mMap.addMarker(endMarker);
-    }
-
-    @Override
-    public void onRoutingCancelled() {
-        Findroutes(start, end);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Findroutes(start, end);
     }
 }

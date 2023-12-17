@@ -2,10 +2,11 @@ package com.hashimte.hashbus1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.LruCache;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,11 +18,11 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.hashimte.hashbus1.databinding.ActivityMainBinding;
-import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
+import com.hashimte.hashbus1.model.Point;
+import com.hashimte.hashbus1.model.User;
 import com.hashimte.hashbus1.ui.ticket.ShortestPath;
-import com.hashimte.hashbus1.ui.ticket.ShowYourTicketFragment;
-import com.hashimte.hashbus1.ui.ticket.TicketFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,27 +37,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intent = new Intent(MainActivity.this, ShortestPath.class);
-                startActivity(intent);
-            }
-        });
-
+//        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                Intent intent = new Intent(MainActivity.this, ShortestPath.class);
+//                startActivity(intent);
+//            }
+//        });
+        LruCache<String, Point> lruCache = new LruCache<>(1000);
+        lruCache.put("Hi", new Point());
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.mapsFragment, R.id.ticketFragment, R.id.nav_settings)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        TextView usernameDrawer = binding.navView.getHeaderView(0).findViewById(R.id.txt_username_drawer);
+        TextView emailDrawer = binding.navView.getHeaderView(0).findViewById(R.id.txt_email_drawer);
+        User user = new Gson().fromJson(getSharedPreferences("app_prefs", MODE_PRIVATE).getString("userInfo", null), User.class);
+        if(user != null && usernameDrawer != null && emailDrawer != null) {
+            usernameDrawer.setText(user.getName());
+            emailDrawer.setText(user.getEmail());
+        }
     }
 
     @Override

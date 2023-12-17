@@ -4,15 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.hashimte.hashbus1.R;
-import com.hashimte.hashbus1.ui.search.SearchAdapter;
-import com.hashimte.hashbus1.ui.search.SearchData;
 
 import java.text.DecimalFormat;
 
@@ -44,8 +41,6 @@ public class YourTicketAdapter extends RecyclerView.Adapter<YourTicketAdapter.Vi
         DecimalFormat decimalFormat=new DecimalFormat("#.##");
 
         holder.price.setText(decimalFormat.format(yourTikectData1.getPrice()));
-
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
