@@ -14,6 +14,10 @@ public class Schedule {
     private Integer bus;   // 1  2  3  4  5
     @SerializedName("time")
     private String time; // 10 11 12 13 18
+    @SerializedName("nextPoint")
+    private Integer nextPoint;
+    @SerializedName("passengersNumber")
+    private Integer passengersNumber;
 
     public String getTime() {
         return time;

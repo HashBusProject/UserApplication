@@ -3,6 +3,7 @@ package com.hashimte.hashbus1.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashSet;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class Journey {
     @SerializedName("destinationPoint")
     private Integer destinationPoint;
     @SerializedName("stopPoints")
-    private HashSet<Integer> stopPoints;
+    private List<Integer> stopPoints;
     @SerializedName("journeys")
     private HashSet<Schedule> journeys;
     @SerializedName("price")

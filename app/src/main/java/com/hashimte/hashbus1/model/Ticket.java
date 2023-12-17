@@ -1,10 +1,15 @@
 package com.hashimte.hashbus1.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 
 @Data
 public class Ticket {
-    private long id;
-    private double price;
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("journey")
     private Journey journey;
+    @SerializedName("user")
+    private User user;
 }

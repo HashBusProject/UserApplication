@@ -19,7 +19,6 @@ public class Point {
     private Integer id;
     @SerializedName("pointName")
     @Expose
-
     private String pointName;
     @Expose
     @SerializedName("x")
@@ -27,7 +26,6 @@ public class Point {
     @Expose
     @SerializedName("y")
     private Double y;
-    //    private HashSet<Journey> journeys;
     @Expose
     @SerializedName("journeysID")
     private HashSet<Integer> journeysID;

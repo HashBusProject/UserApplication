@@ -28,6 +28,8 @@ import com.hashimte.hashbus1.api.UserServicesImp;
 import com.hashimte.hashbus1.map.MyRoutingListener;
 import com.hashimte.hashbus1.model.Journey;
 import com.hashimte.hashbus1.model.Point;
+import com.hashimte.hashbus1.model.Ticket;
+import com.hashimte.hashbus1.model.User;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
     private MaterialTextView startPointName;
     private MaterialTextView endPointName;
     private Button buy;
+    private Button cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +75,13 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
         ticketPrice = findViewById(R.id.txt_ticket_price);
         startPointName = findViewById(R.id.txt_start_name);
         endPointName = findViewById(R.id.txt_end_name);
-        buy = findViewById(R.id.buyTicket);
+        buy = findViewById(R.id.btn_buy_ticket);
+        cancel = findViewById(R.id.btn_cancel);
+        User user = new Gson().fromJson(getSharedPreferences("app_prefs", MODE_PRIVATE).getString("userInfo", null), User.class);
+        Bundle extras = getIntent().getExtras();
         if (locationPermission) {
             Journey journey = new Gson().fromJson(
-                    getIntent().getExtras().getString("data", null),
+                    extras.getString("data", null),
                     Journey.class
             );
             journeyName.setText(journey.getName());
@@ -103,6 +109,25 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
             );
             buy.setOnClickListener(v -> {
                 // TODO, buy a ticket from here
+                UserServicesImp.getInstance().buyATicket(user.getUserID(), journey.getId()).enqueue(
+                        new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                if(response.isSuccessful()) {
+                                    finish();
+                                }
+                                else Log.e("Error :", response.message());
+                            }
+
+                            @Override
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                Log.e("onFaliure :", t.getMessage());
+                            }
+                        }
+                );
+            });
+            cancel.setOnClickListener(v -> {
+                finish();
             });
         }
     }
