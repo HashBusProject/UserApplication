@@ -33,7 +33,7 @@ public interface UserServices {
     Call<Bus> getBusById(@Query("busId") Integer busId);
 
     @GET("/User/GetTicketsByUserId")
-    Call<Ticket> getTicketsByUserId(@Query("userId") Integer userId);
+    Call<List<Ticket>> getTicketsByUserId(@Query("userId") Integer userId);
 
     @GET("/User/GetAllJournys")
     Call<List<Journey>> getAllJourneys();
@@ -42,7 +42,7 @@ public interface UserServices {
     Call<Journey> getJourneyById(@Query("journeyId") Integer journeyId);
 
     @GET("/User/BuyTicket")
-    Call<Boolean> buyATicket();
+    Call<Boolean> buyATicket(@Query("userId") Integer userId, @Query("journeyId") Integer journeyId);
 
     @GET("/User/AllPointByJourneyId")
     Call<List<Point>> getAllPointByJourneyId(@Query("journeyId") Integer journeyId);

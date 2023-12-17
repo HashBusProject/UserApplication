@@ -47,6 +47,8 @@
     <string name="title_activity_neareat_point">NeareatPoint</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="bus_time_result_start">Bus will leave the %1$s at %2$s</string>
+    <string name="bus_time_result_min">"Bus takes %1$s Minutes to arrive to %2$s</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -158,5 +160,7 @@
     <string name="title_activity_result_view">ResultViewActivity</string>
     <string name="title_activity_journey_reserve_map">JourneyReserveMapActivity</string>
     <string name="wait">Wait...</string>
+    <string name="ticket_result_having">You have %1$d ticket/s</string>
+    <string name="ticket_result_price">%1$.2f JD</string>
 
 </resources>

@@ -45,6 +45,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private Context context;
     private Point startPoint;
     private Point endPoint;
+    private String min;
 
 
     public SearchAdapter(List<SearchDataSchedule> searchData, Context context, Point startPoint, Point endPoint) {
@@ -87,7 +88,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         DirectionsRoute route = directionsResult.routes[0];
                         DirectionsLeg leg = route.legs[0];
                         Duration duration = leg.duration;
-                        String min = duration.humanReadable;
+                        this.min = duration.humanReadable;
                         holder.waitTime.setText(min);
                     } else {
                         // Handle failure to get directions
@@ -119,6 +120,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 data.putString("searchData", new Gson().toJson(searchData1));
                                 data.putString("startPointData", new Gson().toJson(startPoint));
                                 data.putString("endPointData", new Gson().toJson(startPoint));
+                                data.putString("timeToArrive", min == null ? holder.waitTime.getText().toString() : min);
                                 intent.putExtras(data);
                                 context.startActivity(intent);
                             } else {

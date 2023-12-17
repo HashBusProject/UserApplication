@@ -69,7 +69,7 @@ public class UserServicesImp implements UserServices {
     }
 
     @GET("/User/GetTicketsByUserId")
-    public Call<Ticket> getTicketsByUserId(@Query("userId") Integer userId) {
+    public Call<List<Ticket>> getTicketsByUserId(@Query("userId") Integer userId) {
         return retrofit.create(UserServices.class).getTicketsByUserId(userId);
     }
 
@@ -84,8 +84,8 @@ public class UserServicesImp implements UserServices {
     }
 
     @GET("/User/BuyTicket")
-    public Call<Boolean> buyATicket() {
-        return retrofit.create(UserServices.class).buyATicket();
+    public Call<Boolean> buyATicket(@Query("userId") Integer userId, @Query("journeyId") Integer journeyId) {
+        return retrofit.create(UserServices.class).buyATicket(userId, journeyId);
     }
 
     @Override
