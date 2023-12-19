@@ -73,6 +73,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rectangel"
                     android:elevation="20dp"
+                  android:paddingStart="35sp"
                     android:hint="@string/username_email"
                     android:inputType="textEmailAddress|textPersonName"
                     android:lines="1"
@@ -99,6 +100,7 @@
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:lines="1"
+                    android:paddingStart="35sp"
                     android:paddingHorizontal="10dp"
                     android:textSize="14sp"
                     app:boxStrokeColor="@color/hash_dark" />

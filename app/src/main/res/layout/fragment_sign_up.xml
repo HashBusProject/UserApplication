@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.SignUpFragment">
+    tools:context=".ui.auth.SignUpFragment"
+    android:id="@+id/yy">
 
     
 
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Create an"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -51,7 +52,7 @@
         android:layout_below="@+id/const1"
         android:layout_alignParentStart="true"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="1dp">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -74,7 +75,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:startIconDrawable="@drawable/baseline_person_24">
+                android:layout_gravity="center_horizontal"
+                app:startIconDrawable="@drawable/baseline_person_24"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_username"
@@ -85,6 +88,7 @@
                     android:hint="@string/username"
                     android:inputType="textPersonName"
                     android:lines="1"
+                    android:paddingStart="35sp"
                     android:paddingHorizontal="10sp"
                     android:textSize="14sp"
                     app:boxStrokeColor="@color/hash_dark" />
@@ -106,6 +110,7 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:lines="1"
+                    android:paddingStart="35sp"
                     android:paddingHorizontal="10sp"
                     android:textSize="14sp"
                     app:boxStrokeColor="@color/hash_dark" />
@@ -125,6 +130,7 @@
                     android:background="@drawable/rectangel"
                     android:elevation="20dp"
                     android:hint="@string/prompt_firstname"
+                    android:paddingStart="35sp"
                     android:inputType="textPersonName"
                     android:lines="1"
                     android:paddingHorizontal="10sp"
@@ -149,6 +155,7 @@
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:lines="1"
+                    android:paddingStart="35sp"
                     android:paddingHorizontal="10dp"
                     android:textSize="14sp"
                     app:boxStrokeColor="@color/hash_dark" />
@@ -170,6 +177,7 @@
                     android:hint="@string/prompt_confirm_password"
                     android:inputType="textPassword"
                     android:lines="1"
+                    android:paddingStart="35sp"
                     android:paddingHorizontal="10dp"
                     android:textSize="14sp"
                     app:boxStrokeColor="@color/hash_dark" />
@@ -188,7 +196,6 @@
                     android:layout_width="114dp"
                     android:layout_height="48dp"
                     android:layout_marginTop="20dp"
-
                     android:background="@drawable/loginbutt"
                     android:singleLine="true"
                     android:text="Sign Up"
@@ -208,110 +215,112 @@
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rrrrrr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-13sp">
+
+        <LinearLayout
+            android:id="@+id/linearlayoutView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="28dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/linearlayoutView"
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1.5dp"
+                android:layout_marginStart="55dp"
+                android:layout_weight="1"
+                android:background="#A70303" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="OR"
+                android:textColor="#A70303"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1.5dp"
+                android:layout_marginEnd="55dp"
+                android:layout_weight="1"
+                android:background="#A70303" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1.5dp"
-                    android:layout_marginStart="55dp"
-                    android:layout_weight="1"
-                    android:background="#A70303" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="OR"
-                    android:textColor="#A70303"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/linearlayoutGF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearlayoutView">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1.5dp"
-                    android:layout_marginEnd="55dp"
-                    android:layout_weight="1"
-                    android:background="#A70303" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearlayoutGF"
+            <ImageButton
+                android:id="@+id/gmailbuttonS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearlayoutView">
+                android:background="@color/white"
+                android:contentDescription="gmail"
+                android:src="@drawable/google_6424087" />
 
-                <ImageButton
-                    android:id="@+id/gmailbuttonS"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:contentDescription="gmail"
-                    android:src="@drawable/google_6424087" />
-
-                <ImageButton
-                    android:id="@+id/facebookbuttonS"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:background="@color/white"
-                    android:contentDescription="facebook"
-                    android:src="@drawable/facebook_fill" />
-            </LinearLayout>
-
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/facebookbuttonS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:layout_marginBottom="40dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearlayoutGF">
+                android:layout_marginStart="20dp"
+                android:background="@color/white"
+                android:contentDescription="facebook"
+                android:src="@drawable/facebook_fill" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Don’t have an account?"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="40dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearlayoutGF">
 
-                <TextView
-                    android:id="@+id/lginLink"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Login"
-                    android:textColor="#A70303"
-                    android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Don’t have an account?"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/lginLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Login"
+                android:textColor="#A70303"
+                android:textSize="14sp" />
 
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
