@@ -80,16 +80,17 @@
             android:layout_marginEnd="51sp"
             android:inputType="time"
             android:paddingStart="2sp"
-            android:paddingEnd="14sp"
+
             android:textColor="@color/hash_dark"
             android:textSize="14sp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="20sp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="25sp"
             android:layout_marginEnd="16sp"
+
             android:contentDescription="forword"
             android:drawableEnd="@drawable/baseline_arrow_forward_ios_24_2"
             android:drawablePadding="10sp" />
