@@ -170,7 +170,7 @@
             android:layout_marginHorizontal="10sp"
             android:layout_marginBottom="4sp"
             android:padding="10sp"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:backgroundTint="@color/Gray"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -184,7 +184,7 @@
             android:layout_marginHorizontal="10sp"
             android:layout_marginBottom="4sp"
             android:padding="10sp"
-            android:text="Buy"
+            android:text="@string/buy"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="18sp" />

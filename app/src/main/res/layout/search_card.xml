@@ -49,36 +49,18 @@
             />
 
 
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/waitTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="25sp"
-                android:layout_marginEnd="51sp"
-                android:inputType="time"
-                android:paddingEnd="14sp"
-                android:paddingStart="-2sp"
-                android:text="22"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/waitMinTime"
-                android:layout_width="30sp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginStart="30sp"
-                android:layout_marginTop="24sp"
-                android:gravity="end"
-
-                android:layout_marginEnd="30sp"
-                android:paddingEnd="6sp"
-                android:inputType="text"
-                android:text="min"
-                android:textColor="@color/white"
-                android:textSize="14.6sp" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/waitTime"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="25sp"
+            android:layout_marginEnd="51sp"
+            android:inputType="time"
+            android:paddingStart="2sp"
+            android:paddingEnd="14sp"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"

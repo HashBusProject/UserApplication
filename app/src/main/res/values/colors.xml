@@ -10,6 +10,7 @@
     <color name="hash_dark">#A70303</color>
     <color name="hash_dark_with_tr">#55A70303</color>
     <color name="hash_light">#A51E1E</color>
+    <color name="live_green">#3CB043</color>
     <!-- OLD COLORS    -->
 
     <color name="Ivory">#FFFFF0</color>

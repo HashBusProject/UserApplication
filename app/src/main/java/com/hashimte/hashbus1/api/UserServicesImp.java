@@ -1,5 +1,8 @@
 package com.hashimte.hashbus1.api;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.google.gson.Gson;
 import com.hashimte.hashbus1.model.Bus;
 import com.hashimte.hashbus1.model.Journey;
@@ -83,7 +86,7 @@ public class UserServicesImp implements UserServices {
         return retrofit.create(UserServices.class).getJourneyById(journeyId);
     }
 
-    @GET("/User/BuyTicket")
+    @POST("/User/BuyTicket")
     public Call<Boolean> buyATicket(@Query("userId") Integer userId, @Query("journeyId") Integer journeyId) {
         return retrofit.create(UserServices.class).buyATicket(userId, journeyId);
     }

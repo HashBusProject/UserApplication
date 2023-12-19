@@ -162,5 +162,9 @@
     <string name="wait">Wait...</string>
     <string name="ticket_result_having">You have %1$d ticket/s</string>
     <string name="ticket_result_price">%1$.2f JD</string>
+    <string name="cancel">Cancel</string>
+    <string name="buy">Buy</string>
+    <string name="reserve_journey">Reserve Journey</string>
+    <string name="confirm_ride">Confirm Ride</string>
 
 </resources>

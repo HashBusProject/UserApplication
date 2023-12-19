@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +40,9 @@ public class JourneyReserveView extends AppCompatActivity {
     private List<Ticket> userTickets;
     private Bundle data;
     private User user;
+    private Gson gson;
+    private String timeToArrive;
+    private SharedPreferences journeyPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,8 @@ public class JourneyReserveView extends AppCompatActivity {
         binding = ActivityJourneyReserveViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Gson gson = new Gson();
+        gson = new Gson();
+        journeyPrefs = getSharedPreferences("journey_prefs", MODE_PRIVATE);
         data = getIntent().getExtras();
         schedule = gson.fromJson(
                 data.getString("searchData"),
@@ -57,10 +63,38 @@ public class JourneyReserveView extends AppCompatActivity {
         }
         start = gson.fromJson(data.getString("startPointData"), Point.class);
         end = gson.fromJson(data.getString("endPointData"), Point.class);
-        String timeToArrive = data.getString("timeToArrive");
+        timeToArrive = data.getString("timeToArrive");
+        user = gson.fromJson(getSharedPreferences("app_prefs", MODE_PRIVATE).getString("userInfo", null), User.class);
+        if (!journeyPrefs.contains("track"))
+            setContentOfView();
+        else
+            setContentIfReserve();
+    }
+
+    private void setContentIfReserve() {
+        refreshTime();
+        binding.imgTicket.setImageResource(R.drawable.destination);
+        binding.txtTicket.setText("");
+        binding.btnResserve.setText(R.string.confirm_ride);
+        binding.btnCancelOrder.setOnClickListener(v -> {
+            journeyPrefs.edit().clear().apply();
+//            onResume();
+            setContentOfView();
+        });
+        binding.btnResserve.setOnClickListener(v -> {
+
+        });
+    }
+
+    private void refreshTime() {
+
+    }
+
+    private void setContentOfView() {
         if (schedule.getSchedule().getNextPoint() > 0) {
             binding.txtTime.setText(getString(R.string.bus_time_result_min, timeToArrive, start.getPointName()));
         } else {
+
             UserServicesImp.getInstance().getPointByID(schedule.getJourney().getSourcePoint()).enqueue(
                     new Callback<Point>() {
                         @Override
@@ -79,8 +113,8 @@ public class JourneyReserveView extends AppCompatActivity {
                     }
             );
         }
-        user = gson.fromJson(getSharedPreferences("app_prefs", MODE_PRIVATE).getString("userInfo", null), User.class);
         getTicketsForUser();
+        binding.btnResserve.setText(R.string.reserve_journey);
         binding.txtDriverName.setText(schedule.getBus().getDriver().getName());
         binding.btnResserve.setOnClickListener(v -> {
             //TODO, after reserve!!
@@ -94,12 +128,15 @@ public class JourneyReserveView extends AppCompatActivity {
                     .setNegativeButton("No", (dialog, id) -> {
                         //  Action for 'NO' Button
                         dialog.cancel();
-                        Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
+                        Toast.makeText(getApplicationContext(), "you choose no action for alertbox",
                                 Toast.LENGTH_SHORT).show();
                     });
             AlertDialog alert = builder.create();
             alert.setTitle("AlertDialogExample");
             alert.show();
+
+            journeyPrefs.edit().putBoolean("track", true).apply();
+            setContentIfReserve();
         });
         binding.btnBuyTicket.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ShortestPath.class);
@@ -108,6 +145,10 @@ public class JourneyReserveView extends AppCompatActivity {
             data.putString("user", gson.toJson(user));
             intent.putExtras(data);
             startActivity(intent);
+        });
+
+        binding.btnCancelOrder.setOnClickListener(v -> {
+            finish();
         });
     }
 
@@ -142,6 +183,10 @@ public class JourneyReserveView extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getTicketsForUser();
+        if (!journeyPrefs.contains("track"))
+            setContentOfView();
+        else
+            setContentIfReserve();
     }
 
     private void getTicketsForUser() {
