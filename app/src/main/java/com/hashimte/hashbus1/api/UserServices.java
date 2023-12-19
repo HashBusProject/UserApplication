@@ -41,7 +41,7 @@ public interface UserServices {
     @GET("/User/GetJourneyById")
     Call<Journey> getJourneyById(@Query("journeyId") Integer journeyId);
 
-    @GET("/User/BuyTicket")
+    @POST("/User/BuyTicket")
     Call<Boolean> buyATicket(@Query("userId") Integer userId, @Query("journeyId") Integer journeyId);
 
     @GET("/User/AllPointByJourneyId")

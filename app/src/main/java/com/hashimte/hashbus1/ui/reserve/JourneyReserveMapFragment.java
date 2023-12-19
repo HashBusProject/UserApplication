@@ -10,6 +10,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,9 +75,6 @@ public class JourneyReserveMapFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-
             mMap = googleMap;
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager
                     .PERMISSION_GRANTED) {
@@ -118,7 +116,6 @@ public class JourneyReserveMapFragment extends Fragment {
                     latLngs.add(latLng);
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng).title(points.get(i).getPointName());
-//                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_stop));
                     mMap.addMarker(markerOptions);
                 }
                 latLngs.add(new LatLng(points.get(points.size() - 1).getX(), points.get(points.size() - 1).getY()));
@@ -193,5 +190,27 @@ public class JourneyReserveMapFragment extends Fragment {
     public void onStop() {
         super.onStop();
         endLocationUpdate();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("onResume() :::", "RESUMEEEEEEEEEEEEEEE");
+    }
+
+    private void content(boolean x){
+//        if(!x || );
+//        else {
+//            refresh(1000);
+//        }
+    }
+
+    private void refresh(int millisecond){
+        final Handler handler = new Handler();
+        final Runnable runnable = () -> {
+            content(true);
+        };
+        handler.postDelayed(runnable, millisecond);
+
     }
 }

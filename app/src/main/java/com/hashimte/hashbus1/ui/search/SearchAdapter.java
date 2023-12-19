@@ -4,6 +4,7 @@ package com.hashimte.hashbus1.ui.search;
 import android.content.Context;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.Duration;
 import com.google.maps.model.LatLng;
@@ -32,10 +32,8 @@ import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.ui.reserve.JourneyReserveView;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,36 +71,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder holder, int position) {
         final SearchDataSchedule searchData1 = searchData.get(position);
-        Thread thread = new Thread(() -> {
-            try {
-                DirectionsResult directionsResult = DirectionsApi.newRequest(getGeoContext())
-                        .mode(TravelMode.DRIVING)
-                        //TODO,
-                        .origin(new LatLng(32.103113, 36.180002))
-                        .destination(new LatLng(32.058997, 36.066677))
-                        .await();
-
-                runOnUiThread(() -> {
-                    if (directionsResult != null) {
-                        // Update UI with directions information
-                        DirectionsRoute route = directionsResult.routes[0];
-                        DirectionsLeg leg = route.legs[0];
-                        Duration duration = leg.duration;
-                        this.min = duration.humanReadable;
-                        holder.waitTime.setText(min);
-                    } else {
-                        // Handle failure to get directions
-                        Toast.makeText(context, "Error getting directions", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } catch (ApiException | InterruptedException | IOException e) {
-                Toast.makeText(context, "Error Handel", Toast.LENGTH_SHORT).show();
-            }
-        });
-        thread.start();
+        if (searchData1.getSchedule().getNextPoint() > 0) {
+            LatLng busLatLng = new LatLng(searchData1.getBus().getX(), searchData1.getBus().getY());
+            LatLng pickPointLatLng = new LatLng(startPoint.getX(), startPoint.getY());
+            new DirectionsTask(holder, busLatLng, pickPointLatLng).execute();
+        }
         holder.startLocation.setText(searchData1.getJourney().getName());
         holder.endLocation.setText(searchData1.getSchedule().getTime().toString());
-        holder.waitMinTime.setText("min");
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, JourneyReserveView.class);
             Bundle data = new Bundle();
@@ -124,13 +99,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 intent.putExtras(data);
                                 context.startActivity(intent);
                             } else {
-                                Log.e("onSe :", response.message());
+                                Log.e("onResponse :", response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Point> call, Throwable t) {
-                            Log.e("onFailuer :", t.getMessage());
+                            Log.e("onFailure :", t.getMessage());
                         }
                     }
             );
@@ -160,7 +135,48 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             startLocation = itemView.findViewById(R.id.startLocation);
             endLocation = itemView.findViewById(R.id.endLocation);
             waitTime = itemView.findViewById(R.id.waitTime);
-            waitMinTime = itemView.findViewById(R.id.waitMinTime);
+        }
+    }
+
+    class DirectionsTask extends AsyncTask<Void, Void, String> {
+
+        ViewHolder holder;
+        LatLng busLatLng;
+        LatLng pickPointLatLng;
+
+        public DirectionsTask(ViewHolder holder, LatLng busLatLng, LatLng pickPointLatLng) {
+            this.holder = holder;
+            this.busLatLng = busLatLng;
+            this.pickPointLatLng = pickPointLatLng;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                DirectionsResult result = DirectionsApi.newRequest(getGeoContext())
+                        .mode(TravelMode.DRIVING)
+                        .origin(new LatLng(32.103113, 36.180002))
+                        .destination(new LatLng(32.058997, 36.066677))
+                        .await();
+                if (result != null) {
+                    DirectionsRoute route = result.routes[0];
+                    DirectionsLeg leg = route.legs[0];
+                    Duration duration = leg.duration;
+                    return duration.humanReadable;
+                } else {
+                    return null;
+                }
+            } catch (Exception e) {
+                // Handle exceptions
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            holder.waitTime.setText(s);
+            min = s;
         }
     }
 }
