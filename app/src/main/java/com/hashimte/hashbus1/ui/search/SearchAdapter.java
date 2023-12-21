@@ -1,6 +1,7 @@
 package com.hashimte.hashbus1.ui.search;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import android.content.Intent;
@@ -28,6 +29,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.TravelMode;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.api.UserServicesImp;
+import com.hashimte.hashbus1.map.DirectionsTask;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.ui.reserve.JourneyReserveView;
@@ -68,13 +70,21 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private void runOnUiThread(Fun fun) {
     }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder holder, int position) {
         final SearchDataSchedule searchData1 = searchData.get(position);
         if (searchData1.getSchedule().getNextPoint() > 0) {
             LatLng busLatLng = new LatLng(searchData1.getBus().getX(), searchData1.getBus().getY());
             LatLng pickPointLatLng = new LatLng(startPoint.getX(), startPoint.getY());
-            new DirectionsTask(holder, busLatLng, pickPointLatLng).execute();
+            new DirectionsTask(new LatLng(32.103113, 36.180002), new LatLng(32.058997, 36.066677)){
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    holder.waitTime.setText(s);
+                    min = s;
+                }
+            }.execute();
         }
         holder.startLocation.setText(searchData1.getJourney().getName());
         holder.endLocation.setText(searchData1.getSchedule().getTime().toString());
@@ -88,13 +98,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             if (response.isSuccessful()) {
                                 if (searchData1.getJourney().getSourcePoint() == startPoint.getId()) {
                                     data.putBoolean("isSame", true);
-                                } else {
                                     data.putString("pickPoint", new Gson().toJson(response.body()));
+                                } else {
+                                    data.putString("pickPoint", new Gson().toJson(startPoint));
                                     data.putBoolean("isSame", false);
                                 }
                                 data.putString("searchData", new Gson().toJson(searchData1));
                                 data.putString("startPointData", new Gson().toJson(startPoint));
-                                data.putString("endPointData", new Gson().toJson(startPoint));
+                                data.putString("endPointData", new Gson().toJson(endPoint));
                                 data.putString("timeToArrive", min == null ? holder.waitTime.getText().toString() : min);
                                 intent.putExtras(data);
                                 context.startActivity(intent);
@@ -113,14 +124,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         });
     }
 
-    private GeoApiContext getGeoContext() {
-        GeoApiContext geoApiContext = new GeoApiContext();
-        return geoApiContext.setQueryRateLimit(3)
-                .setApiKey("AIzaSyDyZbg_i9y9T5_tdCRX3evZdD89rKPMWqk")
-                .setConnectTimeout(1, TimeUnit.SECONDS)
-                .setReadTimeout(1, TimeUnit.SECONDS)
-                .setWriteTimeout(1, TimeUnit.SECONDS);
-    }
+
 
     @Override
     public int getItemCount() {
@@ -135,48 +139,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             startLocation = itemView.findViewById(R.id.startLocation);
             endLocation = itemView.findViewById(R.id.endLocation);
             waitTime = itemView.findViewById(R.id.waitTime);
-        }
-    }
-
-    class DirectionsTask extends AsyncTask<Void, Void, String> {
-
-        ViewHolder holder;
-        LatLng busLatLng;
-        LatLng pickPointLatLng;
-
-        public DirectionsTask(ViewHolder holder, LatLng busLatLng, LatLng pickPointLatLng) {
-            this.holder = holder;
-            this.busLatLng = busLatLng;
-            this.pickPointLatLng = pickPointLatLng;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                DirectionsResult result = DirectionsApi.newRequest(getGeoContext())
-                        .mode(TravelMode.DRIVING)
-                        .origin(new LatLng(32.103113, 36.180002))
-                        .destination(new LatLng(32.058997, 36.066677))
-                        .await();
-                if (result != null) {
-                    DirectionsRoute route = result.routes[0];
-                    DirectionsLeg leg = route.legs[0];
-                    Duration duration = leg.duration;
-                    return duration.humanReadable;
-                } else {
-                    return null;
-                }
-            } catch (Exception e) {
-                // Handle exceptions
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            holder.waitTime.setText(s);
-            min = s;
         }
     }
 }

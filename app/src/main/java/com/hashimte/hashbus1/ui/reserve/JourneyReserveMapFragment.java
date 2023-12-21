@@ -7,7 +7,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.api.UserServices;
@@ -42,8 +46,10 @@ import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.ui.ticket.ShortestPath;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,13 +60,14 @@ public class JourneyReserveMapFragment extends Fragment {
     private GoogleMap mMap;
     private Location myLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
-
     private LocationRequest locationRequest;
     private List<Point> pointForAJourney;
     private Point pick;
     private SearchDataSchedule schedule;
     private Point start;
     private Point end;
+    private SharedPreferences journeyPrefs;
+    private Marker busLocationMarker;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
 
@@ -84,29 +91,35 @@ public class JourneyReserveMapFragment extends Fragment {
                 end = ((JourneyReserveView) getActivity()).getEnd();
                 pick = ((JourneyReserveView) getActivity()).getPick();
                 schedule = ((JourneyReserveView) getActivity()).getSchedule();
+                journeyPrefs = ((JourneyReserveView) getActivity()).getJourneyPrefs();
                 UserServicesImp.getInstance().getAllPointByJourneyId(schedule.getJourney().getId()).enqueue(
                         new Callback<List<Point>>() {
                             @Override
                             public void onResponse(Call<List<Point>> call, Response<List<Point>> response) {
                                 if (response.isSuccessful()) {
                                     pointForAJourney = response.body();
+                                    Log.i("pointForAJourney :", pointForAJourney.toString());
                                     findRoutes(pointForAJourney);
                                 }
+                                else
+                                    Log.e("error on Resonse :", response.errorBody().toString());
                             }
 
                             @Override
                             public void onFailure(Call<List<Point>> call, Throwable t) {
-
+                                Log.e("error on OnFailure :", t.getMessage());
                             }
                         }
                 );
             }
         }
 
+
         public void findRoutes(List<Point> points) {
             if (points.get(0) == null || points.get(points.size() - 1) == null) {
                 Toast.makeText(getContext(), "Unable to get location", Toast.LENGTH_LONG).show();
             } else {
+                Log.i("points :", points.toString());
                 List<LatLng> latLngs = new ArrayList<>();
                 latLngs.add(new LatLng(points.get(0).getX(), points.get(0).getY()));
                 mMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Start Point"));
@@ -134,6 +147,30 @@ public class JourneyReserveMapFragment extends Fragment {
 
     };
 
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            Log.d("onLocationResult: ", locationResult.getLastLocation().toString());
+//            if (journeyPrefs.contains("track") && schedule.getSchedule().getNextPoint() > 0) {
+//                LatLng busLatLng = ((JourneyReserveView) getActivity()).getBusLatLng();
+//                setBusLocationMarker(busLatLng);
+//            }
+        }
+    };
+
+    private void setBusLocationMarker(com.google.android.gms.maps.model.LatLng location) {
+        if(busLocationMarker == null){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(location);
+            busLocationMarker = mMap.addMarker(markerOptions);
+        }
+        else {
+            busLocationMarker.setPosition(location);
+//            mMap.moveCamera();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -157,14 +194,6 @@ public class JourneyReserveMapFragment extends Fragment {
         }
     }
 
-    LocationCallback locationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(@NonNull LocationResult locationResult) {
-            super.onLocationResult(locationResult);
-            Log.d("onLocationResult: ", locationResult.getLastLocation().toString());
-        }
-    };
-
     private void startLocationUpdate() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -174,7 +203,6 @@ public class JourneyReserveMapFragment extends Fragment {
 
     private void endLocationUpdate() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("Hey!!!", "HEYYYYYYYYYYYYYYYYYYYYYY!!");
             return;
         }
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
@@ -195,17 +223,17 @@ public class JourneyReserveMapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("onResume() :::", "RESUMEEEEEEEEEEEEEEE");
+//        Log.i("onResume() :::", "RESUMEEEEEEEEEEEEEEE");
     }
 
-    private void content(boolean x){
+    private void content(boolean x) {
 //        if(!x || );
 //        else {
 //            refresh(1000);
 //        }
     }
 
-    private void refresh(int millisecond){
+    private void refresh(int millisecond) {
         final Handler handler = new Handler();
         final Runnable runnable = () -> {
             content(true);
