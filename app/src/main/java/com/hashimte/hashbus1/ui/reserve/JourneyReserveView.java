@@ -2,28 +2,42 @@ package com.hashimte.hashbus1.ui.reserve;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telecom.Conference;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.maps.model.LatLng;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.api.UserServicesImp;
 import com.hashimte.hashbus1.databinding.ActivityJourneyReserveViewBinding;
+import com.hashimte.hashbus1.map.DirectionsTask;
+import com.hashimte.hashbus1.model.Bus;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.model.Ticket;
 import com.hashimte.hashbus1.model.User;
+import com.hashimte.hashbus1.ui.ride.ConfirmRideActivity;
 import com.hashimte.hashbus1.ui.ticket.ShortestPath;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import lombok.NonNull;
@@ -43,22 +57,23 @@ public class JourneyReserveView extends AppCompatActivity {
     private Gson gson;
     private String timeToArrive;
     private SharedPreferences journeyPrefs;
+    private Bus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityJourneyReserveViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         gson = new Gson();
         journeyPrefs = getSharedPreferences("journey_prefs", MODE_PRIVATE);
         data = getIntent().getExtras();
         schedule = gson.fromJson(
-                data.getString("searchData"),
+                data.getString("searchData", "{}"),
                 SearchDataSchedule.class
         );
         getSupportActionBar().setTitle(schedule.getJourney().getName());
-        if (!data.getBoolean("isSame", false)) {
+        if (!data.getBoolean("isSame", true)) {
             pick = gson.fromJson(data.getString("pickPoint"), Point.class);
         }
         start = gson.fromJson(data.getString("startPointData"), Point.class);
@@ -72,29 +87,97 @@ public class JourneyReserveView extends AppCompatActivity {
     }
 
     private void setContentIfReserve() {
-        refreshTime();
         binding.imgTicket.setImageResource(R.drawable.destination);
-        binding.txtTicket.setText("");
+        binding.txtTicket.setText("" + pick.getPointName() + " to " + end.getPointName());
         binding.btnResserve.setText(R.string.confirm_ride);
+        binding.btnResserve.setOnClickListener(v -> {
+            Intent intent = new Intent(JourneyReserveView.this, ConfirmRideActivity.class);
+            intent.putExtras(data);
+            startActivity(intent);
+        });
         binding.btnCancelOrder.setOnClickListener(v -> {
             journeyPrefs.edit().clear().apply();
-//            onResume();
             setContentOfView();
         });
-        binding.btnResserve.setOnClickListener(v -> {
+        if (schedule.getSchedule().getNextPoint() > 0) {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    UserServicesImp.getInstance().getBusById(schedule.getBus().getId()).enqueue(
+                            new Callback<Bus>() {
+                                @SuppressLint("StaticFieldLeak")
+                                @Override
+                                public void onResponse(Call<Bus> call, Response<Bus> response) {
+                                    if (response.isSuccessful()) {
+                                        Log.i("Bus is :", Integer.toString(response.body().getId()));
+                                        bus = response.body();
+                                        //TODO, add the LatLng from bus
+                                        new DirectionsTask(new LatLng(32.049452, 36.068936), new LatLng(32.059458, 36.066354)) {
+                                            @Override
+                                            protected void onPostExecute(String s) {
+                                                super.onPostExecute(s);
+                                                timeToArrive = s;
+                                                binding.txtTime.setText(getString(R.string.bus_time_result_min, s, start.getPointName()));
+                                            }
+                                        }.execute();
+                                    }
+                                }
 
-        });
+                                @Override
+                                public void onFailure(Call<Bus> call, Throwable t) {
+
+                                }
+                            }
+                    );
+                }
+            });
+        } else {
+            UserServicesImp.getInstance().getPointByID(schedule.getJourney().getSourcePoint()).enqueue(
+                    new Callback<Point>() {
+                        @Override
+                        public void onResponse(Call<Point> call, Response<Point> response) {
+                            if (response.isSuccessful()) {
+                                binding.imgTime.setImageResource(R.drawable.schedule);
+                                binding.txtTime.setText(getString(R.string.bus_time_result_start, response.body().getPointName(),
+                                        schedule.getSchedule().getTime()));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Point> call, Throwable t) {
+
+                        }
+                    }
+            );
+
+        }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void refreshTime() {
-
+        new DirectionsTask(new LatLng(32.133113, 36.150002), new LatLng(32.068997, 36.076677)) {
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+            }
+        }.execute();
     }
 
     private void setContentOfView() {
         if (schedule.getSchedule().getNextPoint() > 0) {
             binding.txtTime.setText(getString(R.string.bus_time_result_min, timeToArrive, start.getPointName()));
         } else {
-
             UserServicesImp.getInstance().getPointByID(schedule.getJourney().getSourcePoint()).enqueue(
                     new Callback<Point>() {
                         @Override
@@ -114,6 +197,7 @@ public class JourneyReserveView extends AppCompatActivity {
             );
         }
         getTicketsForUser();
+        binding.imgTicket.setImageResource(R.drawable.ticket1);
         binding.btnResserve.setText(R.string.reserve_journey);
         binding.txtDriverName.setText(schedule.getBus().getDriver().getName());
         binding.btnResserve.setOnClickListener(v -> {
@@ -179,6 +263,18 @@ public class JourneyReserveView extends AppCompatActivity {
         return end;
     }
 
+    public SharedPreferences getJourneyPrefs() {
+        return journeyPrefs;
+    }
+
+    public com.google.android.gms.maps.model.LatLng getBusLatLng() {
+        if (bus == null) return null;
+        return new com.google.android.gms.maps.model.LatLng(
+                bus.getX(),
+                bus.getY()
+        );
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -210,6 +306,7 @@ public class JourneyReserveView extends AppCompatActivity {
                                 binding.btnResserve.setEnabled(true);
                             }
                         } else {
+                            Toast.makeText(JourneyReserveView.this, "RESPONED", Toast.LENGTH_LONG).show();
                             binding.txtTicket.setText(getString(R.string.ticket_result_price, schedule.getJourney().getPrice()));
                             binding.btnBuyTicket.setVisibility(View.VISIBLE);
                             binding.btnBuyTicket.setEnabled(true);
@@ -219,6 +316,7 @@ public class JourneyReserveView extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<List<Ticket>> call, Throwable t) {
+                        Toast.makeText(JourneyReserveView.this, t.getMessage(), Toast.LENGTH_LONG).show();
                         binding.txtTicket.setText(getString(R.string.ticket_result_price, schedule.getJourney().getPrice()));
                         binding.btnBuyTicket.setVisibility(View.VISIBLE);
                         binding.btnBuyTicket.setEnabled(true);

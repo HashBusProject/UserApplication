@@ -37,15 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-//        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                Intent intent = new Intent(MainActivity.this, ShortestPath.class);
-//                startActivity(intent);
-//            }
-//        });
         LruCache<String, Point> lruCache = new LruCache<>(1000);
         lruCache.put("Hi", new Point());
         DrawerLayout drawer = binding.drawerLayout;
