@@ -28,8 +28,22 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        return view;
+
+        binding=FragmentSettingsBinding.inflate(inflater,container,false);
+         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.logout.setOnClickListener(view1 -> {
+            getActivity().getSharedPreferences("app_prefs",Context.MODE_PRIVATE).edit()
+                    .clear()
+                    .apply();
+            Intent intent=new Intent(getContext(), LauncherActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        });
     }
 
     @Override

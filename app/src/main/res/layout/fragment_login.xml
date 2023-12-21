@@ -193,45 +193,18 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearlayoutGF"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearlayoutView">
-
-            <ImageButton
-                android:id="@+id/gmailbuttonL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:contentDescription="gmail"
-                android:src="@drawable/google_6424087" />
-
-            <ImageButton
-                android:id="@+id/facebookbuttonL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:background="@color/white"
-                android:contentDescription="facebook"
-                android:src="@drawable/facebook_fill" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
             android:layout_marginBottom="40dp"
             android:orientation="vertical"
+            android:layout_marginTop="-60sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearlayoutGF">
+            app:layout_constraintTop_toBottomOf="@+id/linearlayoutView">
 
             <TextView
                 android:layout_width="wrap_content"
