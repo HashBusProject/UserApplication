@@ -3,6 +3,7 @@ package com.hashimte.hashbus1.api;
 import com.hashimte.hashbus1.model.Bus;
 import com.hashimte.hashbus1.model.Journey;
 import com.hashimte.hashbus1.model.Point;
+import com.hashimte.hashbus1.model.Schedule;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.model.Ticket;
 import com.hashimte.hashbus1.model.User;
@@ -46,5 +47,12 @@ public interface UserServices {
 
     @GET("/User/AllPointByJourneyId")
     Call<List<Point>> getAllPointByJourneyId(@Query("journeyId") Integer journeyId);
+
+    @POST("/User/ConfirmRide")
+    Call<Boolean> confirmRide(
+            @Query("user") Integer userId,
+            @Query("journey") Integer journeyId,
+            @Query("bus") Integer busId,
+            @Body Schedule schedule);
 
 }

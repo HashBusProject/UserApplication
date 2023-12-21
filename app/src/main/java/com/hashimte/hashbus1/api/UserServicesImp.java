@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.hashimte.hashbus1.model.Bus;
 import com.hashimte.hashbus1.model.Journey;
 import com.hashimte.hashbus1.model.Point;
+import com.hashimte.hashbus1.model.Schedule;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.model.Ticket;
 import com.hashimte.hashbus1.model.User;
@@ -95,5 +96,15 @@ public class UserServicesImp implements UserServices {
     @GET("/User/AllPointByJourneyId")
     public Call<List<Point>> getAllPointByJourneyId(@Query("journeyId") Integer journeyId) {
         return retrofit.create(UserServices.class).getAllPointByJourneyId(journeyId);
+    }
+
+    @Override
+    @POST("/User/ConfirmRide")
+    public Call<Boolean> confirmRide(
+            @Query("user") Integer userId,
+            @Query("journey") Integer journeyId,
+            @Query("bus") Integer busId,
+            @Body Schedule schedule) {
+        return retrofit.create(UserServices.class).confirmRide(userId, journeyId, busId, schedule);
     }
 }
