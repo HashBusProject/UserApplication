@@ -11,7 +11,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="110sp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="10sp"
         android:gravity="center"
@@ -21,20 +21,28 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/yourTicketCard"
             android:layout_width="match_parent"
-            android:layout_height="100sp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="3sp"
 
             android:background="@color/hash_dark"
 
             >
             <LinearLayout
+                android:layout_marginTop="6sp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+
+               >
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                   <ImageView
+                       android:layout_width="30sp"
+                       android:layout_height="30sp"
+                       android:src="@drawable/bus_j"
+                       android:paddingStart="7sp"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,6 +72,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:src="@drawable/ticket"
+                    android:paddingStart="7sp"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,6 +110,12 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="6sp"
                >
+                <ImageView
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:src="@drawable/monye"
+                    android:paddingStart="7sp"/>
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
