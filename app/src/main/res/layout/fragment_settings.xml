@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".ui.settings.SettingsFragment">
 
 <LinearLayout
@@ -70,6 +71,7 @@ android:orientation="horizontal"
 
         android:layout_marginTop="3sp">
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/changepass"
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:text="Change passwod"
@@ -83,6 +85,7 @@ android:orientation="horizontal"
            android:drawablePadding="20sp"
             />
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/changeemail"
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:text="Change email"

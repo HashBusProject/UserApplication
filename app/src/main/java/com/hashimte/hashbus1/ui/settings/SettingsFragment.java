@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -44,6 +45,20 @@ public class SettingsFragment extends Fragment {
             startActivity(intent);
             getActivity().finish();
         });
+
+        binding.changepass.setOnClickListener(view1 -> {
+    Intent intent =new Intent(getContext(), ChangePasswordActivity.class);
+     startActivity(intent);
+
+          
+        });
+
+        binding.changeemail.setOnClickListener(view1 -> {
+            Intent intent =new Intent(getContext(), ChangeEmailActivity.class);
+            startActivity(intent);
+        });
+
+
     }
 
     @Override
