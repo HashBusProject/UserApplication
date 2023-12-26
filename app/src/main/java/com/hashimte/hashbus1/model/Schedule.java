@@ -22,4 +22,40 @@ public class Schedule {
     public String getTime() {
         return time;
     }
+
+    public Integer getJourney() {
+        return journey;
+    }
+
+    public void setJourney(Integer journey) {
+        this.journey = journey;
+    }
+
+    public Integer getBus() {
+        return bus;
+    }
+
+    public void setBus(Integer bus) {
+        this.bus = bus;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Integer getNextPoint() {
+        return nextPoint;
+    }
+
+    public void setNextPoint(Integer nextPoint) {
+        this.nextPoint = nextPoint;
+    }
+
+    public Integer getPassengersNumber() {
+        return passengersNumber;
+    }
+
+    public void setPassengersNumber(Integer passengersNumber) {
+        this.passengersNumber = passengersNumber;
+    }
 }

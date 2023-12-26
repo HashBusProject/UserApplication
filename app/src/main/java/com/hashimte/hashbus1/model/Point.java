@@ -41,4 +41,40 @@ public class Point {
     public String getPointName() {
         return pointName;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setPointName(String pointName) {
+        this.pointName = pointName;
+    }
+
+    public Double getX() {
+        return x;
+    }
+
+    public void setX(Double x) {
+        this.x = x;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public void setY(Double y) {
+        this.y = y;
+    }
+
+    public HashSet<Integer> getJourneysID() {
+        return journeysID;
+    }
+
+    public void setJourneysID(HashSet<Integer> journeysID) {
+        this.journeysID = journeysID;
+    }
 }

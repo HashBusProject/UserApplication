@@ -102,16 +102,9 @@ public class JourneyReserveView extends AppCompatActivity {
         if (schedule.getSchedule().getNextPoint() > 0) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     UserServicesImp.getInstance().getBusById(schedule.getBus().getId()).enqueue(
@@ -120,10 +113,9 @@ public class JourneyReserveView extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<Bus> call, Response<Bus> response) {
                                     if (response.isSuccessful()) {
-                                        Log.i("Bus is :", Integer.toString(response.body().getId()));
+                                        Log.i("Bus is :", response.body().toString());
                                         bus = response.body();
-                                        //TODO, add the LatLng from bus
-                                        new DirectionsTask(new LatLng(32.049452, 36.068936), new LatLng(32.059458, 36.066354)) {
+                                        new DirectionsTask(new LatLng(bus.getX(), bus.getY()), new LatLng(pick.getX(), pick.getY())) {
                                             @Override
                                             protected void onPostExecute(String s) {
                                                 super.onPostExecute(s);
@@ -163,17 +155,6 @@ public class JourneyReserveView extends AppCompatActivity {
 
         }
     }
-
-    @SuppressLint("StaticFieldLeak")
-    private void refreshTime() {
-        new DirectionsTask(new LatLng(32.133113, 36.150002), new LatLng(32.068997, 36.076677)) {
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-        }.execute();
-    }
-
     private void setContentOfView() {
         if (schedule.getSchedule().getNextPoint() > 0) {
             binding.txtTime.setText(getString(R.string.bus_time_result_min, timeToArrive, start.getPointName()));
@@ -218,7 +199,6 @@ public class JourneyReserveView extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.setTitle("AlertDialogExample");
             alert.show();
-
             journeyPrefs.edit().putBoolean("track", true).apply();
             setContentIfReserve();
         });
@@ -265,14 +245,6 @@ public class JourneyReserveView extends AppCompatActivity {
 
     public SharedPreferences getJourneyPrefs() {
         return journeyPrefs;
-    }
-
-    public com.google.android.gms.maps.model.LatLng getBusLatLng() {
-        if (bus == null) return null;
-        return new com.google.android.gms.maps.model.LatLng(
-                bus.getX(),
-                bus.getY()
-        );
     }
 
     @Override

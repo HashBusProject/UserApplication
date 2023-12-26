@@ -1,13 +1,10 @@
 package com.hashimte.hashbus1;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.LruCache;
-import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -22,7 +19,6 @@ import com.google.gson.Gson;
 import com.hashimte.hashbus1.databinding.ActivityMainBinding;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.User;
-import com.hashimte.hashbus1.ui.ticket.ShortestPath;
 
 public class MainActivity extends AppCompatActivity {
 

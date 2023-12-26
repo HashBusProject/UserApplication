@@ -26,4 +26,60 @@ public class Bus {
     private Double x;
     @SerializedName("y")
     private Double y;
+
+    public User getDriver() {
+        return driver;
+    }
+
+    public void setDriver(User driver) {
+        this.driver = driver;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getCap() {
+        return cap;
+    }
+
+    public void setCap(Integer cap) {
+        this.cap = cap;
+    }
+
+    public HashSet<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(HashSet<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
+    public Boolean getWorking() {
+        return isWorking;
+    }
+
+    public void setWorking(Boolean working) {
+        isWorking = working;
+    }
+
+    public Double getX() {
+        return x;
+    }
+
+    public void setX(Double x) {
+        this.x = x;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public void setY(Double y) {
+        this.y = y;
+    }
 }

@@ -77,7 +77,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if (searchData1.getSchedule().getNextPoint() > 0) {
             LatLng busLatLng = new LatLng(searchData1.getBus().getX(), searchData1.getBus().getY());
             LatLng pickPointLatLng = new LatLng(startPoint.getX(), startPoint.getY());
-            new DirectionsTask(new LatLng(32.103113, 36.180002), new LatLng(32.058997, 36.066677)){
+            new DirectionsTask(busLatLng, pickPointLatLng){
                 @Override
                 protected void onPostExecute(String s) {
                     super.onPostExecute(s);
