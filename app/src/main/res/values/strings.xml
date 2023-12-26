@@ -166,5 +166,6 @@
     <string name="buy">Buy</string>
     <string name="reserve_journey">Reserve Journey</string>
     <string name="confirm_ride">Confirm Ride</string>
+    <string name="finish_my_trip">Finish My Trip</string>
 
 </resources>
