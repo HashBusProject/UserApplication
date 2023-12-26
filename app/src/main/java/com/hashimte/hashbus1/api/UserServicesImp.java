@@ -107,4 +107,14 @@ public class UserServicesImp implements UserServices {
             @Body Schedule schedule) {
         return retrofit.create(UserServices.class).confirmRide(userId, journeyId, busId, schedule);
     }
+
+    @POST("/User/ReserveASite")
+    public Call<Boolean> reserveASite(@Query("scheduleID") Integer scheduleID){
+        return retrofit.create(UserServices.class).reserveASite(scheduleID);
+    }
+
+    @POST("/User/CancelReserve")
+    public Call<Boolean> cancelReserve(@Query("scheduleID") Integer scheduleID){
+        return retrofit.create(UserServices.class).cancelReserve(scheduleID);
+    }
 }

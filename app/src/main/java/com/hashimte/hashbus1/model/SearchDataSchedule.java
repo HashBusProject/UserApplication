@@ -1,5 +1,6 @@
 package com.hashimte.hashbus1.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ public class SearchDataSchedule {
     @SerializedName("journey")
     private Journey journey;
     @SerializedName("schedule")
+    @Expose
     private Schedule schedule;
     @SerializedName("bus")
     private Bus bus;

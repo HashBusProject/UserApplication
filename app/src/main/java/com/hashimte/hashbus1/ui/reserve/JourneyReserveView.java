@@ -74,12 +74,12 @@ public class JourneyReserveView extends AppCompatActivity {
         gson = new Gson();
         journeyPrefs = getSharedPreferences("journey_prefs", MODE_PRIVATE);
         data = getIntent().getExtras();
-        if(data == null) data = new Bundle();
+        if (data == null) data = new Bundle();
         schedule = gson.fromJson(
                 data.getString("searchData", null),
                 SearchDataSchedule.class
         );
-        if(schedule == null && journeyPrefs.contains("schedule")){
+        if (schedule == null && journeyPrefs.contains("schedule")) {
             schedule = gson.fromJson(journeyPrefs.getString("schedule", null), SearchDataSchedule.class);
         }
         getSupportActionBar().setTitle(schedule.getJourney().getName());
@@ -108,8 +108,22 @@ public class JourneyReserveView extends AppCompatActivity {
             startActivity(intent);
         });
         binding.btnCancelOrder.setOnClickListener(v -> {
-            journeyPrefs.edit().clear().apply();
-            setContentOfView();
+            UserServicesImp.getInstance().cancelReserve(schedule.getSchedule().getScheduleId()).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.isSuccessful() && Boolean.TRUE.equals(response.body())) {
+                        journeyPrefs.edit().clear().apply();
+                        setContentOfView();
+                    } else {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+
+                }
+            });
+
         });
         setTime();
     }
@@ -121,16 +135,38 @@ public class JourneyReserveView extends AppCompatActivity {
         binding.btnResserve.setText(R.string.reserve_journey);
         binding.txtDriverName.setText(schedule.getBus().getDriver().getName());
         binding.btnResserve.setOnClickListener(v -> {
+            Log.e("schedule :", schedule.getSchedule().toString());
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Are You Sure you want to reviser a site?")
                     .setCancelable(true)
                     .setPositiveButton("YES", (dialog, which) -> {
-                        journeyPrefs.edit()
-                                .putBoolean("track", true)
-                                .putString("schedule", gson.toJson(schedule))
-                                .putString("pick", gson.toJson(pick))
-                                .apply();
-                        setContentIfReserve();
+                        // TODO, Add API HERE
+                        UserServicesImp.getInstance().reserveASite(schedule.getSchedule().getScheduleId()).enqueue(
+                                new Callback<Boolean>() {
+                                    @Override
+                                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                        if (response.isSuccessful() && Boolean.TRUE.equals(response.body())) {
+                                            journeyPrefs.edit()
+                                                    .putBoolean("track", true)
+                                                    .putString("schedule", gson.toJson(schedule))
+                                                    .putString("pick", gson.toJson(pick))
+                                                    .apply();
+                                            setContentIfReserve();
+                                        } else {
+                                            if (response.isSuccessful())
+                                                Log.e("onResponse isSuccessful: ", response.body().toString());
+                                            else
+                                                Log.e("onResponse :", response.message());
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Boolean> call, Throwable t) {
+                                        Log.e("error :", "EROOORRR " + t.getMessage());
+                                    }
+                                }
+                        );
                     })
                     .setNegativeButton("NO", (dialog, id) -> {
                         //  Action for 'NO' Button
@@ -157,8 +193,8 @@ public class JourneyReserveView extends AppCompatActivity {
     public void setContentAsConfirmed() {
         schedule = gson.fromJson(journeyPrefs.getString("schedule", null), SearchDataSchedule.class);
         pick = gson.fromJson(journeyPrefs.getString("pick", null), Point.class);
-        ((ViewGroup.LayoutParams) binding.driverCard.getLayoutParams()).height = 1;
-        ((ViewGroup.LayoutParams) binding.ticketCard.getLayoutParams()).height = 1;
+        binding.driverCard.getLayoutParams().height = 1;
+        binding.ticketCard.getLayoutParams().height = 1;
         binding.driverCard.setVisibility(View.INVISIBLE);
         binding.ticketCard.setVisibility(View.INVISIBLE);
         binding.btnResserve.setText(R.string.finish_my_trip);

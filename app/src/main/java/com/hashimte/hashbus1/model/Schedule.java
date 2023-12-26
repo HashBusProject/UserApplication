@@ -1,5 +1,6 @@
 package com.hashimte.hashbus1.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Time;
@@ -8,6 +9,9 @@ import lombok.Data;
 
 @Data
 public class Schedule {
+    @SerializedName("scheduleId")
+    @Expose
+    private Integer scheduleId;
     @SerializedName("journey")
     private Integer journey; // 1 - 9
     @SerializedName("bus")
@@ -57,5 +61,13 @@ public class Schedule {
 
     public void setPassengersNumber(Integer passengersNumber) {
         this.passengersNumber = passengersNumber;
+    }
+
+    public Integer getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(Integer scheduleId) {
+        this.scheduleId = scheduleId;
     }
 }
