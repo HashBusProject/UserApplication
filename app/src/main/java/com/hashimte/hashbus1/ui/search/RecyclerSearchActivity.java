@@ -53,14 +53,13 @@ public class RecyclerSearchActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     schedules = response.body();
                     if(schedules.isEmpty()){
-//                        Snackbar.make(RecyclerSearchActivity.this.getCurrentFocus(), "Replace with your own action", Snackbar.LENGTH_LONG)
-//                                .setAction("Action", null).show();
                         getSharedPreferences("app_prefs", MODE_PRIVATE).edit().putBoolean("error", true).apply();
                         finish();
                         return;
                     }
                     SearchAdapter searchAdapter = new SearchAdapter(schedules, RecyclerSearchActivity.this, startPoint, endPoint);
                     recyclerView.setAdapter(searchAdapter);
+                    Log.w("schedules :", schedules.toString());
                 }
                 else {
                     Log.e("Error on Response", "error");

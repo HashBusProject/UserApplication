@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -42,6 +43,7 @@ import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.api.UserServices;
 import com.hashimte.hashbus1.api.UserServicesImp;
 import com.hashimte.hashbus1.map.MyRoutingListener;
+import com.hashimte.hashbus1.model.Bus;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.SearchDataSchedule;
 import com.hashimte.hashbus1.ui.ticket.ShortestPath;
@@ -64,8 +66,6 @@ public class JourneyReserveMapFragment extends Fragment {
     private List<Point> pointForAJourney;
     private Point pick;
     private SearchDataSchedule schedule;
-    private Point start;
-    private Point end;
     private SharedPreferences journeyPrefs;
     private Marker busLocationMarker;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -87,8 +87,6 @@ public class JourneyReserveMapFragment extends Fragment {
                     .PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
                 mMap.setOnMyLocationChangeListener(location -> myLocation = location);
-                start = ((JourneyReserveView) getActivity()).getStart();
-                end = ((JourneyReserveView) getActivity()).getEnd();
                 pick = ((JourneyReserveView) getActivity()).getPick();
                 schedule = ((JourneyReserveView) getActivity()).getSchedule();
                 journeyPrefs = ((JourneyReserveView) getActivity()).getJourneyPrefs();
@@ -100,6 +98,7 @@ public class JourneyReserveMapFragment extends Fragment {
                                     pointForAJourney = response.body();
                                     Log.i("pointForAJourney :", pointForAJourney.toString());
                                     findRoutes(pointForAJourney);
+
                                 }
                                 else
                                     Log.e("error on Resonse :", response.errorBody().toString());
@@ -151,23 +150,40 @@ public class JourneyReserveMapFragment extends Fragment {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
+            myLocation = locationResult.getLastLocation();
             Log.d("onLocationResult: ", locationResult.getLastLocation().toString());
-//            if (journeyPrefs.contains("track") && schedule.getSchedule().getNextPoint() > 0) {
-//                LatLng busLatLng = ((JourneyReserveView) getActivity()).getBusLatLng();
-//                setBusLocationMarker(busLatLng);
-//            }
+            if (schedule.getSchedule().getNextPoint() > 0) {
+                UserServicesImp.getInstance().getBusById(schedule.getBus().getId()).enqueue(new Callback<Bus>() {
+                    @Override
+                    public void onResponse(Call<Bus> call, Response<Bus> response) {
+                        if(response.isSuccessful()) {
+                            Log.e("Bus :", response.body().toString());
+                            LatLng busLatLng = new LatLng(response.body().getX(), response.body().getY());
+                            setBusLocationMarker(busLatLng);
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Bus> call, Throwable t) {
+
+                    }
+                });
+
+            }
         }
     };
 
-    private void setBusLocationMarker(com.google.android.gms.maps.model.LatLng location) {
+    private void setBusLocationMarker(LatLng location) {
         if(busLocationMarker == null){
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(location);
+            markerOptions.anchor(0.5F, 0.5F);
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_bus_30));
             busLocationMarker = mMap.addMarker(markerOptions);
         }
         else {
             busLocationMarker.setPosition(location);
-//            mMap.moveCamera();
         }
     }
 
@@ -218,6 +234,13 @@ public class JourneyReserveMapFragment extends Fragment {
     public void onStop() {
         super.onStop();
         endLocationUpdate();
+        myLocation = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        myLocation = null;
     }
 
     @Override

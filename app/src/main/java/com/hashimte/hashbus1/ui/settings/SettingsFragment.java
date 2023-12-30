@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -23,27 +24,39 @@ public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
 
-    private Button button;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding=FragmentSettingsBinding.inflate(inflater,container,false);
-         return binding.getRoot();
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.logout.setOnClickListener(view1 -> {
-            getActivity().getSharedPreferences("app_prefs",Context.MODE_PRIVATE).edit()
+            getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE).edit()
                     .clear()
                     .apply();
-            Intent intent=new Intent(getContext(), LauncherActivity.class);
+            Intent intent = new Intent(getContext(), LauncherActivity.class);
             startActivity(intent);
             getActivity().finish();
         });
+
+        binding.changepass.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), ChangePasswordActivity.class);
+            startActivity(intent);
+
+
+        });
+
+        binding.changeemail.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), ChangeEmailActivity.class);
+            startActivity(intent);
+        });
+
+
     }
 
     @Override

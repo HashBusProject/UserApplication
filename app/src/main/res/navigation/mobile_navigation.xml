@@ -35,4 +35,9 @@
         android:name="com.hashimte.hashbus1.ui.ticket.ShortestPath"
         android:label="activity_shortest_path"
         tools:layout="@layout/activity_shortest_path" />
+    <activity
+        android:id="@+id/journeyReserveView"
+        android:name="com.hashimte.hashbus1.ui.reserve.JourneyReserveView"
+        android:label="activity_journey_reserve_view"
+        tools:layout="@layout/activity_journey_reserve_view" />
 </navigation>

@@ -175,6 +175,7 @@ public class ConfirmRideActivity extends AppCompatActivity {
                                 //TODO, Confirm
                                 Toast.makeText(ConfirmRideActivity.this, "DONE", Toast.LENGTH_LONG).show();
                                 binding.txtUrl.setText("DONE");
+                                journeyPrefs.edit().putBoolean("confirmed", true).apply();
                             } else {
                                 //TODO, Message
                                 Toast.makeText(ConfirmRideActivity.this, "NOT DONE", Toast.LENGTH_LONG).show();

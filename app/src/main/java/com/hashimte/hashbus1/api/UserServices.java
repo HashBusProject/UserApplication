@@ -55,4 +55,10 @@ public interface UserServices {
             @Query("bus") Integer busId,
             @Body Schedule schedule);
 
+    @POST("/User/CancelReserve")
+    Call<Boolean> cancelReserve(@Query("scheduleID") Integer scheduleID);
+
+
+    @POST("/User/ReserveASite")
+    Call<Boolean> reserveASite(@Query("scheduleID") Integer scheduleID);
 }

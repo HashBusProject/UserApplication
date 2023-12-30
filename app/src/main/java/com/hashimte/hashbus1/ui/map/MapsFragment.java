@@ -67,12 +67,12 @@ public class MapsFragment extends Fragment {
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 102);
+            }
             myMap = googleMap;
             //currentLocation.getLatitude(), currentLocation.getLongitude()
-            LatLng currentLatLng = new LatLng(31.8783807, 36.0174577);
-            myMap.addMarker(new MarkerOptions().position(currentLatLng).title("My Location"));
-            myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
+
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager
                     .PERMISSION_GRANTED) {
                 myMap.setMyLocationEnabled(true);
@@ -90,6 +90,7 @@ public class MapsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         getLastLocation();
+
         return rootView;
     }
 
@@ -107,6 +108,11 @@ public class MapsFragment extends Fragment {
                 SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_reserve);
                 if (mapFragment != null) {
                     mapFragment.getMapAsync(callback);
+                    LatLng currentLatLng = new LatLng(
+                            currentLocation.getLatitude(), currentLocation.getLongitude());
+
+                    myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+                    myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
                 }
             }
         });
