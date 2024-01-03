@@ -132,7 +132,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        MaterialTextView startLocation, endLocation, waitMinTime, waitTime;
+        MaterialTextView startLocation, endLocation, waitTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

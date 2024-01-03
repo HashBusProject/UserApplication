@@ -57,8 +57,8 @@
             android:theme="@style/Theme.HashBus1" />
         <activity
             android:name=".ui.ticket.ShortestPath"
-            android:exported="true"
-            android:theme="@style/Theme.HashBus1" />
+            android:exported="false"
+            android:theme="@style/Theme.HashBus1.NoActionBar" />
         <activity
             android:name=".ui.map.StartSearchBarActivity"
             android:exported="true" />
@@ -77,7 +77,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

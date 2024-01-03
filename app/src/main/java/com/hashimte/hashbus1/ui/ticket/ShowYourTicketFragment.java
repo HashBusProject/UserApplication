@@ -14,17 +14,28 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.hashimte.hashbus1.R;
+import com.hashimte.hashbus1.api.UserServicesImp;
+import com.hashimte.hashbus1.model.Ticket;
+import com.hashimte.hashbus1.model.User;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ShowYourTicketFragment extends Fragment {
     private RecyclerView recyclerView;
-    private YourTikectData[] yourTikectData;
+    private List<Ticket> tickets;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -39,19 +50,32 @@ public class ShowYourTicketFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.showTicketRecyclerView);
         recyclerView.setHasFixedSize(true);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        yourTikectData = new YourTikectData[]{
-                new YourTikectData("bus1", 22, 22),
-                new YourTikectData("bus1", 22, 22.1),
-                new YourTikectData("bus1", 22, 22.2),
-                new YourTikectData("bus1", 22, 22.4),
-                new YourTikectData("bus1", 22, 22.5),
-                new YourTikectData("bus1", 22, 22.6),
-                new YourTikectData("bus1", 22, 22.9),
-        };
+        User user = new Gson().fromJson(
+                getContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        .getString("userInfo", null),
+                User.class
+        );
+        UserServicesImp.getInstance().getTicketsByUserId(user.getUserID()).enqueue(new Callback<List<Ticket>>() {
+            @Override
+            public void onResponse(Call<List<Ticket>> call, Response<List<Ticket>> response) {
+                if(response.isSuccessful()){
+                    tickets = response.body();
+                    YourTicketAdapter yourTicketAdapter = new YourTicketAdapter(tickets, getContext());
+                    recyclerView.setAdapter(yourTicketAdapter);
+                }
+                else {
+                    // TODO Handle this.
+                    Toast.makeText(getContext(), "Error!", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        YourTicketAdapter yourTicketAdapter = new YourTicketAdapter(yourTikectData, getContext());
-        recyclerView.setAdapter(yourTicketAdapter);
+            @Override
+            public void onFailure(Call<List<Ticket>> call, Throwable t) {
+                // TODO Handle this.
+                Toast.makeText(getContext(), "Error onFailure!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

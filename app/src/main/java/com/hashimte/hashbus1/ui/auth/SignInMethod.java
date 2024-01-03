@@ -27,4 +27,9 @@ public class SignInMethod extends AppCompatActivity {
             startActivity(intentSignUp);
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

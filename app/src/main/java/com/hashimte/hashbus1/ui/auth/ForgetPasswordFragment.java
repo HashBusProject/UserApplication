@@ -10,21 +10,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.api.AuthServicesImp;
 import com.hashimte.hashbus1.databinding.FragmentForgetPasswordBinding;
-import com.hashimte.hashbus1.databinding.FragmentLoginBinding;
 import com.hashimte.hashbus1.model.User;
 
 import retrofit2.Call;
@@ -60,25 +54,25 @@ public class ForgetPasswordFragment extends Fragment {
         passwordLayout1.setErrorEnabled(true);
         passwordLayout2.setErrorEnabled(true);
         findAccount.setOnClickListener(v -> {
-            boolean x = false;
+            boolean passwordValidate = false;
             if (!password1.getText().toString().equals(password2.getText().toString())) {
                 passwordLayout2.setError("The Password Should be The Same!");
-                x = true;
+                passwordValidate = true;
             }
             if (email.getText().toString().isEmpty() || email.getText() == null) {
                 emailLayout.setError("Fill the Email Please!!");
-                x = true;
+                passwordValidate = true;
 
             }
             if (password1.getText().toString().isEmpty() || password1.getText() == null) {
-                x = true;
+                passwordValidate = true;
                 passwordLayout1.setError("The Password Is Empty!!");
             }
             if (password2.getText().toString().isEmpty() || password2.getText() == null) {
-                x = true;
+                passwordValidate = true;
                 passwordLayout2.setError("The Confirm Password Is Empty!!");
             }
-            if(x) return;
+            if(passwordValidate) return;
             AuthServicesImp service = AuthServicesImp.getInstance();
             User user = new User();
             user.setEmail(email.getText().toString());
@@ -98,6 +92,9 @@ public class ForgetPasswordFragment extends Fragment {
                     Log.e("Error", "Error is " + t.getMessage());
                 }
             });
+        });
+        binding.backIcon.setOnClickListener(v -> {
+            getActivity().onBackPressed();
         });
         email.addTextChangedListener(clearError(emailLayout));
         password1.addTextChangedListener(clearError(passwordLayout1));
@@ -120,4 +117,5 @@ public class ForgetPasswordFragment extends Fragment {
             }
         };
     }
+
 }

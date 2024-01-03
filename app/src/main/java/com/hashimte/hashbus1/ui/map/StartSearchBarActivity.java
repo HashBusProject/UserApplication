@@ -48,17 +48,12 @@ public class StartSearchBarActivity extends AppCompatActivity {
         // Initialize recyclerview and its adapter
         recyclerView = findViewById(R.id.fromRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        getSampleData();
         editText.setHint("Select Your " + getIntent().getExtras().getString("pointType") + " Point");
         editText.addTextChangedListener(new TextWatcher() {
-            ArrayList<Point> arrayList = new ArrayList<>();
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                if (points != null && !points.isEmpty() && points.get(0) != null) {
-//                    arrayList.add(points.get(0));
-//                    adapter.setData(arrayList);
-//                    adapter.notifyDataSetChanged();
-//                }
+
             }
 
             @Override
@@ -77,7 +72,7 @@ public class StartSearchBarActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        getSampleData();
+
     }
 
     // Sample data for demonstration

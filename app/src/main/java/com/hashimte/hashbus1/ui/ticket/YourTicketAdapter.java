@@ -10,16 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.hashimte.hashbus1.R;
+import com.hashimte.hashbus1.model.Ticket;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class YourTicketAdapter extends RecyclerView.Adapter<YourTicketAdapter.ViewHolder> {
 
-    private YourTikectData[] yourTikectData;
+    private List<Ticket> tickets;
     private Context context;
 
-    public YourTicketAdapter(YourTikectData[] yourTikectData, Context context) {
-        this.yourTikectData = yourTikectData;
+    public YourTicketAdapter(List<Ticket> tickets, Context context) {
+        this.tickets = tickets;
         this.context = context;
     }
 
@@ -34,29 +36,28 @@ public class YourTicketAdapter extends RecyclerView.Adapter<YourTicketAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull YourTicketAdapter.ViewHolder holder, int position) {
-        final YourTikectData yourTikectData1= yourTikectData[position];
-        holder.journeyName.setText(yourTikectData1.getJourneyName());
-        holder.ticketId.setText(Integer.toString(yourTikectData1.getTicketId()));
+        final Ticket ticket = tickets.get(position);
+        holder.journeyName.setText(ticket.getJourney().getName());
+        holder.ticketId.setText(Integer.toString(ticket.getId()));
 
-        DecimalFormat decimalFormat=new DecimalFormat("#.##");
+        DecimalFormat decimalFormat = new DecimalFormat("#.## JD");
 
-        holder.price.setText(decimalFormat.format(yourTikectData1.getPrice()));
+        holder.price.setText(decimalFormat.format(ticket.getJourney().getPrice()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               // Toast.makeText(context, searchData1.getStartLocation(), Toast.LENGTH_SHORT).show();
-            }
+        holder.itemView.setOnClickListener(view -> {
+            // Toast.makeText(context, searchData1.getStartLocation(), Toast.LENGTH_SHORT).show();
         });
 
     }
 
     @Override
     public int getItemCount() {
-        return yourTikectData.length;
+        return tickets.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         MaterialTextView journeyName, ticketId, price;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             journeyName = itemView.findViewById(R.id.journeyName);

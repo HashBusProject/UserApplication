@@ -97,7 +97,7 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
                                 endPointName.setText(points.get(points.size() - 1).getPointName());
                                 Log.i("Points", points.toString());
                             } else {
-
+                                Log.e("error 167", response.message());
                             }
                         }
 
@@ -132,14 +132,6 @@ public class ShortestPath extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager
-                .PERMISSION_GRANTED) {
-//            startLocation
-        }
-    }
 
     private void requestPermision() {
         if (ContextCompat.checkSelfPermission(this,

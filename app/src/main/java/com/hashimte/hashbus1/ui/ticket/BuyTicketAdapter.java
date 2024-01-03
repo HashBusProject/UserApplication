@@ -17,6 +17,7 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
 import com.hashimte.hashbus1.R;
 import com.hashimte.hashbus1.model.Journey;
+import com.hashimte.hashbus1.model.User;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -52,6 +53,7 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.View
             Bundle extras = new Bundle();
             String data = new Gson().toJson(journey);
             extras.putString("data", data);
+            extras.putString("user", context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE).getString("userInfo", null));
             intent.putExtras(extras);
             v.getContext().startActivity(intent);
         });

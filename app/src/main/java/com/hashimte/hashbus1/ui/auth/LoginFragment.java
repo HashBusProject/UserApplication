@@ -27,8 +27,6 @@ import com.hashimte.hashbus1.api.AuthServicesImp;
 import com.hashimte.hashbus1.databinding.FragmentLoginBinding;
 import com.hashimte.hashbus1.model.User;
 
-import org.w3c.dom.Text;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,44 +64,59 @@ public class LoginFragment extends Fragment {
                 return false;
             }
         });
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginButton.setEnabled(false);
-                AuthServicesImp authServicesImp = AuthServicesImp.getInstance();
-                Log.e("User", "I'm Here");
-                User authUser = new User();
-                authUser.setUsername(usernameEditText.getText().toString());
-                authUser.setPassword(passwordEditText.getText().toString());
-                authServicesImp.login(authUser).enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.isSuccessful()) {
-                            startActivity(new Intent(view.getContext(), MainActivity.class));
-                            getActivity().finishAffinity();
-                            getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                    .edit().putBoolean("isLoggedIn", true).apply();
-                            getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                                    .edit().putString("userInfo", new Gson().toJson(response.body(), User.class))
-                                    .apply();
 
-                        } else {
-                            Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
-                            Log.e("Error", response.errorBody().toString());
-                            usernameEditText.setText(null);
-                            passwordEditText.setText(null);
-                            loginButton.setEnabled(true);
-                        }
-                    }
+        // Validation
+        loginButton.setOnClickListener(v -> {
+            loginButton.setEnabled(false);
+            AuthServicesImp authServicesImp = AuthServicesImp.getInstance();
+            Log.e("User", "I'm Here");
+            User authUser = new User();
+            authUser.setUsername(usernameEditText.getText().toString());
+            authUser.setPassword(passwordEditText.getText().toString());
+            boolean isUsernameEmpty = authUser.getUsername().isEmpty(), isPasswordEmpty = authUser.getPassword().isEmpty();
+            if (isUsernameEmpty) {
+                usernameEditText.setError("Username cannot be empty");
+                loginButton.setEnabled(true);
+            }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Log.e("Error: ", t.getMessage());
+            if (isPasswordEmpty) {
+                passwordEditText.setError("Password cannot be empty");
+                loginButton.setEnabled(true);
+            }
+            if (isUsernameEmpty || isPasswordEmpty) return;
+
+
+
+            authServicesImp.login(authUser).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                    if (response.isSuccessful()) {
+                        startActivity(new Intent(view.getContext(), MainActivity.class));
+                        getActivity().finishAffinity();
+                        getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                .edit().putBoolean("isLoggedIn", true).apply();
+                        getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                                .edit().putString("userInfo", new Gson().toJson(response.body(), User.class))
+                                .apply();
+
+                    } else {
                         Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                        // TODO, Edit here
+                        Log.e("Error", response.errorBody().toString());
+                        usernameEditText.setText(null);
+                        passwordEditText.setText(null);
                         loginButton.setEnabled(true);
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    // TODO, Edit it
+                    Log.e("Error: ", t.getMessage());
+                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    loginButton.setEnabled(true);
+                }
+            });
         });
 
         forgetPassword.setOnClickListener((View v) -> {

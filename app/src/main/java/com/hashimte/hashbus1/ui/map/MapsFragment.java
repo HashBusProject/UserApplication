@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.hashimte.hashbus1.R;
+import com.hashimte.hashbus1.databinding.FragmentMapsBinding;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.ui.search.RecyclerSearchActivity;
 
@@ -193,6 +194,15 @@ public class MapsFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        getContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                .edit()
+                .remove("StartPoint")
+                .remove("EndPoint")
+                .apply();
+    }
 
     @Override
     public void onDestroy() {
@@ -241,11 +251,6 @@ public class MapsFragment extends Fragment {
             myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
 
-//            if (startPoint.getId() != 1) {
-//                endPoint = new Gson().fromJson(sharedPreferences.getString("HashPoint", null), Point.class);
-//                endPointTxt.setEnabled(false);
-//            } else
-//                endPointTxt.setEnabled(true);
         }
 
         if (endPoint != null) {
@@ -260,12 +265,6 @@ public class MapsFragment extends Fragment {
             myMap.addMarker(endMarker);
             myMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 17));
-
-//            if (endPoint.getId() != 1) {
-//                startPoint = new Gson().fromJson(sharedPreferences.getString("HashPoint", null), Point.class);
-//                startPointTxt.setEnabled(false);
-//            } else
-//                startPointTxt.setEnabled(true);
         }
 
         // Draw line if both points are available

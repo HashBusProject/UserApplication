@@ -205,6 +205,7 @@ public class JourneyReserveView extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         });
+        //TODO, change the time to time of the end trip
         setTime();
     }
 

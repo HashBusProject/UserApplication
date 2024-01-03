@@ -57,16 +57,15 @@
 
                     />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/journeyName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Journey name"
-                android:textSize="18sp"
-                android:layout_marginTop="2sp"
-                android:layout_gravity="center"
-                android:textColor="@color/hash_dark"
-                />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/journeyName"
+                        android:layout_width="167dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2sp"
+                        android:text="Journey name"
+                        android:textColor="@color/hash_dark"
+                        android:textSize="18sp" />
                 </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="7sp"
@@ -93,16 +92,14 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/ticketId"
-                    android:layout_width="match_parent"
+                    android:layout_width="203dp"
                     android:layout_height="wrap_content"
-                    android:text="Ticket id"
-                    android:inputType="number"
-
                     android:layout_marginTop="2sp"
-                    android:textSize="18sp"
-                    android:gravity="center"
+                    android:gravity="left"
+                    android:inputType="number"
+                    android:text="Ticket id"
                     android:textColor="@color/hash_dark"
-                    />
+                    android:textSize="18sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="8sp"
@@ -129,18 +126,18 @@
                     android:layout_marginStart="10sp"
 
                     />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/price"
-                    android:layout_width="match_parent"
+                    android:layout_width="175dp"
                     android:layout_height="wrap_content"
-                    android:text="Price"
-                    android:textSize="18sp"
-                  android:paddingTop="3sp"
                     android:layout_gravity="start"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:inputType="number"
+                    android:paddingTop="3sp"
+                    android:text="Price"
                     android:textColor="@color/hash_dark"
-                    />
+                    android:textSize="18sp" />
 
             </LinearLayout>
             </LinearLayout>
