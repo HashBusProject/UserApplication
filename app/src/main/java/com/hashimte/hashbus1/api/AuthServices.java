@@ -15,6 +15,6 @@ public interface AuthServices {
     @POST("/User/SignUp")
     Call<User> SignUp(@Body User user);
 
-    @PUT("/User/ChangePassword")
+    @PUT("/User/ForgetPassword")
     Call<User> changePassword(@Body User user);
 }
