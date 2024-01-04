@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.gson.Gson;
 import com.hashimte.hashbus1.model.Bus;
+import com.hashimte.hashbus1.model.ChangePassword;
 import com.hashimte.hashbus1.model.Journey;
 import com.hashimte.hashbus1.model.Point;
 import com.hashimte.hashbus1.model.Schedule;
@@ -23,7 +24,8 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
-public class UserServicesImp implements UserServices {
+public
+class UserServicesImp implements UserServices {
 
     private final static String HTTPS1 = "https://global-memento-407716.uc.r.appspot.com/";
 
@@ -111,6 +113,16 @@ public class UserServicesImp implements UserServices {
     @POST("/User/ReserveASite")
     public Call<Boolean> reserveASite(@Query("scheduleID") Integer scheduleID){
         return retrofit.create(UserServices.class).reserveASite(scheduleID);
+    }
+
+    @PUT("/User/ChangeEmail")
+    public Call<Boolean> changeEmail(@Body User user) {
+        return retrofit.create(UserServices.class).changeEmail(user);
+    }
+
+    @PUT("/User/ChangePassword")
+    public Call<Boolean> changePassword(ChangePassword changePassword) {
+        return retrofit.create(UserServices.class).changePassword(changePassword);
     }
 
     @POST("/User/CancelReserve")

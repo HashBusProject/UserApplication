@@ -45,7 +45,7 @@ public class AuthServicesImp implements AuthServices{
         return retrofit.create(AuthServices.class).SignUp(user);
     }
 
-    @PUT("/User/ChangePassword")
+    @PUT("/User/ForgetPassword")
     public Call<User> changePassword(@Body User user) {
         return retrofit.create(AuthServices.class).changePassword(user);
     }
